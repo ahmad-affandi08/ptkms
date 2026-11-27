@@ -76,6 +76,12 @@
         transition-timing-function: ease-out;
     }
 
+    /* Tailwind 4 tidak lagi memberi kursor tangan ke tombol. */
+    button:not(:disabled),
+    summary {
+        cursor: pointer;
+    }
+
     :focus-visible {
         outline: 2px solid var(--color-signal-bright);
         outline-offset: 2px;

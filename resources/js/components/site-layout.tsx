@@ -85,7 +85,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
                         <LanguageSwitch url={page.url} current={locale} />
                         <Link
                             href={lp('/kontak?perlu=quotation')}
-                            className="hidden rounded-sm bg-signal px-4 py-2.5 text-sm font-semibold text-white hover:bg-signal-dark sm:inline-block"
+                            className="hidden h-10 items-center rounded-sm bg-signal px-4 text-sm font-semibold text-white hover:bg-signal-dark sm:inline-flex"
                         >
                             {t('Minta penawaran')}
                         </Link>
@@ -356,7 +356,7 @@ function LanguageSwitch({ url, current }: { url: string; current: Locale }) {
                 aria-controls={menuId}
                 aria-label={`${t('Bahasa')}: ${active.name}`}
                 onClick={() => setOpen((v) => !v)}
-                className="flex items-center gap-1.5 rounded-sm border border-line bg-white px-2.5 py-2 text-xs font-semibold hover:border-ink/40"
+                className="flex h-10 cursor-pointer items-center gap-2 rounded-sm border border-line bg-white px-3 text-sm font-semibold hover:border-ink/40"
             >
                 <Flag locale={active.locale} />
                 <span>{active.code}</span>
@@ -407,11 +407,16 @@ function LanguageSwitch({ url, current }: { url: string; current: Locale }) {
 
 function Flag({ locale }: { locale: Locale }) {
     const id = 'flag' + useId().replace(/[^a-zA-Z0-9]/g, '');
-    const box = 'h-3 w-[18px] shrink-0 rounded-[1px] ring-1 ring-ink/15';
+    const box = 'size-5 shrink-0 rounded-full ring-1 ring-ink/15';
 
     if (locale === 'id') {
         return (
-            <svg viewBox="0 0 3 2" aria-hidden className={box}>
+            <svg
+                viewBox="0 0 3 2"
+                preserveAspectRatio="xMidYMid slice"
+                aria-hidden
+                className={box}
+            >
                 <rect width="3" height="1" fill="#CE1126" />
                 <rect y="1" width="3" height="1" fill="#fff" />
             </svg>
