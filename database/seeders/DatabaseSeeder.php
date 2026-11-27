@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Faq;
+use App\Models\GalleryItem;
 use App\Models\Service;
 use App\Models\Setting;
 use App\Models\User;
@@ -103,6 +104,25 @@ class DatabaseSeeder extends Seeder
                 'answer' => ['id' => $aId, 'en' => $aEn],
                 'sort' => $i,
             ]);
+        }
+
+        // Foto lapangan dari situs lama kmsidn.com; owner bisa mengganti atau menghapusnya di Galeri.
+        if (GalleryItem::count() === 0) {
+            $photos = [
+                ['perbaikan-mesin-anestesi', 'Perbaikan mesin anestesi', 'Repairing an anaesthesia machine'],
+                ['lampu-operasi', 'Penyetelan lampu operasi', 'Adjusting an operating light'],
+                ['pelatihan-mesin-anestesi', 'Pengenalan mesin anestesi kepada staf rumah sakit', 'Walking hospital staff through an anaesthesia machine'],
+                ['monitor-pasien', 'Pemeriksaan monitor pasien bersama staf rumah sakit', 'Checking a patient monitor with hospital staff'],
+                ['servis-mesin-anestesi', 'Pemeriksaan mesin anestesi di kamar operasi', 'Checking an anaesthesia machine in an operating room'],
+                ['lampu-operasi-dekat', 'Pemeriksaan lampu operasi', 'Inspecting an operating light'],
+                ['pameran', 'Di pameran alat kesehatan', 'At a medical equipment exhibition'],
+            ];
+            foreach ($photos as $i => [$file, $id, $en]) {
+                GalleryItem::create(['caption' => ['id' => $id, 'en' => $en], 'sort' => $i])
+                    ->addMedia(public_path("images/field/{$file}.jpg"))
+                    ->preservingOriginal()
+                    ->toMediaCollection('images');
+            }
         }
     }
 }

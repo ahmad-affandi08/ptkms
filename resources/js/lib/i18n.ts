@@ -16,6 +16,10 @@ const en = {
     'Tutup menu': 'Close menu',
     'Chat WhatsApp': 'Chat on WhatsApp',
     'Yang kami kerjakan': 'What we do',
+    'Di lapangan': 'In the field',
+    'Dokumentasi pekerjaan tim kami di rumah sakit.':
+        'Our team at work in hospitals.',
+    'Lihat galeri': 'View gallery',
     'Dari pengadaan sampai perawatan rutin, satu tim yang sama menangani alat Anda.':
         'From procurement to routine maintenance, the same team looks after your equipment.',
     Selengkapnya: 'Read more',

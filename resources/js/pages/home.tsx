@@ -9,7 +9,9 @@ import {
 import Img from '@/components/img';
 import Seo from '@/components/seo';
 import { useT } from '@/lib/i18n';
+import { cn } from '@/lib/utils';
 import type {
+    GalleryItem,
     Partner,
     Product,
     Project,
@@ -24,7 +26,9 @@ type Props = {
         title: string | null;
         subtitle: string | null;
         image: string | null;
+        caption: string | null;
     };
+    field: GalleryItem[];
     stats: { value: string; label: string }[];
     services: Service[];
     products: Product[];
@@ -37,6 +41,7 @@ type Props = {
 export default function Home({
     seo,
     hero,
+    field,
     stats,
     services,
     products,
@@ -52,16 +57,36 @@ export default function Home({
         <>
             <Seo seo={seo} fallbackTitle={hero.title ?? undefined} />
 
-            <section className="border-b border-line">
-                <Container className="grid gap-10 pt-10 pb-12 lg:grid-cols-12 lg:gap-12 lg:pt-16 lg:pb-16">
+            <section className="relative border-b border-line">
+                {hero.image && (
+                    <figure className="relative lg:absolute lg:inset-y-0 lg:right-0 lg:w-[42%]">
+                        <img
+                            src={hero.image}
+                            alt={hero.caption ?? ''}
+                            fetchPriority="high"
+                            className="aspect-[4/3] w-full animate-reveal object-cover object-[50%_40%] sm:aspect-[16/9] lg:aspect-auto lg:h-full"
+                        />
+                        {hero.caption && (
+                            <figcaption
+                                aria-hidden
+                                className="absolute bottom-0 left-0 flex items-center gap-2.5 bg-ink px-4 py-2.5 text-sm text-paper"
+                            >
+                                <span className="size-2 bg-signal-bright" />
+                                {hero.caption}
+                            </figcaption>
+                        )}
+                    </figure>
+                )}
+
+                <Container className="relative">
                     <div
                         className={
                             hero.image
-                                ? 'lg:col-span-6 lg:self-center'
-                                : 'lg:col-span-10'
+                                ? 'py-12 lg:flex lg:min-h-[calc(100svh-5rem)] lg:w-[54%] lg:flex-col lg:justify-center lg:py-20'
+                                : 'py-12 lg:py-20'
                         }
                     >
-                        <h1 className="text-[2.6rem] leading-[1.02] font-semibold tracking-tight sm:text-6xl lg:text-[4.5rem]">
+                        <h1 className="text-[2.6rem] leading-[1] font-semibold tracking-tight sm:text-6xl lg:text-[5.25rem]">
                             {hero.title ?? site.name}
                         </h1>
                         {hero.subtitle && (
@@ -83,23 +108,54 @@ export default function Home({
                                 {t('Lihat katalog')}
                             </Link>
                         </div>
+                        <SpecPlate stats={stats} className="mt-12 lg:mt-16" />
                     </div>
-                    {hero.image && (
-                        <div className="lg:col-span-6">
-                            <img
-                                src={hero.image}
-                                alt=""
-                                fetchPriority="high"
-                                className="aspect-[4/3] w-full animate-reveal object-cover"
-                            />
-                        </div>
-                    )}
-                </Container>
-
-                <Container className="pb-12 lg:pb-16">
-                    <SpecPlate stats={stats} />
                 </Container>
             </section>
+
+            {field.length > 0 && (
+                <section className="bg-ink py-16 text-paper lg:py-24">
+                    <Container>
+                        <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
+                            <div className="max-w-xl">
+                                <h2 className="text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">
+                                    {t('Di lapangan')}
+                                </h2>
+                                <p className="mt-3 text-paper/70">
+                                    {t(
+                                        'Dokumentasi pekerjaan tim kami di rumah sakit.',
+                                    )}
+                                </p>
+                            </div>
+                            <Link
+                                href={lp('/galeri')}
+                                className="font-semibold underline decoration-signal-bright decoration-2 underline-offset-4 hover:text-white"
+                            >
+                                {t('Lihat galeri')}
+                            </Link>
+                        </div>
+                        <ul className="mt-10 grid grid-cols-2 gap-x-3 gap-y-8 lg:grid-cols-4 lg:gap-x-5">
+                            {field.map((item, i) => (
+                                <li key={i} className="lg:even:mt-12">
+                                    <figure>
+                                        <Img
+                                            image={item.image}
+                                            alt={item.caption ?? ''}
+                                            sizes="(min-width: 1024px) 25vw, 50vw"
+                                            className="aspect-[3/4] w-full bg-ink-soft"
+                                        />
+                                        {item.caption && (
+                                            <figcaption className="mt-3 text-sm text-paper/75">
+                                                {item.caption}
+                                            </figcaption>
+                                        )}
+                                    </figure>
+                                </li>
+                            ))}
+                        </ul>
+                    </Container>
+                </section>
+            )}
 
             {services.length > 0 && (
                 <section className="py-16 lg:py-24">
@@ -244,7 +300,13 @@ export default function Home({
  * Pelat spesifikasi: meniru nameplate pada alat elektromedis (bingkai, paku keling di sudut, label kecil + nilai).
  * Isinya fakta perusahaan dari Pengaturan Situs.
  */
-function SpecPlate({ stats }: { stats: Props['stats'] }) {
+function SpecPlate({
+    stats,
+    className,
+}: {
+    stats: Props['stats'];
+    className?: string;
+}) {
     const { site } = usePage().props;
     const { t } = useT();
 
@@ -271,7 +333,12 @@ function SpecPlate({ stats }: { stats: Props['stats'] }) {
     }
 
     return (
-        <dl className="relative grid grid-cols-1 gap-px border-2 border-ink bg-line sm:grid-cols-2 lg:grid-cols-4">
+        <dl
+            className={cn(
+                'relative grid grid-cols-1 gap-px border-2 border-ink bg-line sm:grid-cols-2',
+                className,
+            )}
+        >
             {[
                 'top-2 left-2',
                 'top-2 right-2',
@@ -285,9 +352,9 @@ function SpecPlate({ stats }: { stats: Props['stats'] }) {
                 />
             ))}
             {cells.map((c) => (
-                <div key={c.label} className="bg-white px-6 py-5 lg:px-7">
+                <div key={c.label} className="bg-white px-6 py-5">
                     <dt className="text-sm text-steel">{c.label}</dt>
-                    <dd className="mt-1 font-display text-2xl font-semibold break-words">
+                    <dd className="mt-1 font-display text-xl font-semibold break-words sm:text-2xl">
                         {c.href ? (
                             <a href={c.href} className="hover:text-signal">
                                 {c.value}

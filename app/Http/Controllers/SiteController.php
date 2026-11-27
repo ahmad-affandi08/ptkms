@@ -31,8 +31,11 @@ class SiteController extends Controller
             'hero' => [
                 'title' => Translation::pick($s['hero_title'] ?? null),
                 'subtitle' => Translation::pick($s['hero_subtitle'] ?? null),
-                'image' => isset($s['hero_image']) ? Storage::disk('public')->url($s['hero_image']) : null,
+                // Tanpa unggahan di Pengaturan Situs, pakai foto lapangan bawaan beserta keterangannya.
+                'image' => isset($s['hero_image']) ? Storage::disk('public')->url($s['hero_image']) : asset('images/field/hero.webp'),
+                'caption' => isset($s['hero_image']) ? null : Translation::pick(['id' => 'Pemeriksaan mesin anestesi di kamar operasi', 'en' => 'Checking an anaesthesia machine in an operating room']),
             ],
+            'field' => GalleryItem::visible()->with('media')->limit(4)->get()->map->toPublic(),
             'stats' => array_map(fn (array $row) => ['value' => $row['value'], 'label' => Translation::pick($row['label'] ?? null)], $s['stats'] ?? []),
             'services' => Service::visible()->get()->map->toPublic(),
             'products' => Product::visible()->where('is_featured', true)->with('category', 'brand', 'media')->limit(8)->get()->map->toPublic(),
