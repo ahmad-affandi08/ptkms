@@ -1,8 +1,9 @@
 import { usePage } from '@inertiajs/react';
+import { useId, useState } from 'react';
 import { ContactBand, Container, PageHeader } from '@/components/blocks';
 import Seo from '@/components/seo';
 import { useT } from '@/lib/i18n';
-import { formatDate } from '@/lib/utils';
+import { cn, formatDate } from '@/lib/utils';
 import type {
     Certificate,
     Faq,
@@ -174,23 +175,7 @@ export default function About({
                         </h2>
                         <div className="border-t border-ink lg:col-span-8">
                             {faqs.map((f, i) => (
-                                <details
-                                    key={i}
-                                    className="group border-b border-line"
-                                >
-                                    <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 font-display text-xl font-semibold [&::-webkit-details-marker]:hidden">
-                                        {f.question}
-                                        <span
-                                            aria-hidden
-                                            className="text-2xl leading-none text-signal transition-transform group-open:rotate-45"
-                                        >
-                                            +
-                                        </span>
-                                    </summary>
-                                    <p className="max-w-prose pb-5 text-steel">
-                                        {f.answer}
-                                    </p>
-                                </details>
+                                <FaqItem key={i} {...f} />
                             ))}
                         </div>
                     </Container>
@@ -199,5 +184,51 @@ export default function About({
 
             <ContactBand />
         </>
+    );
+}
+
+/** Satu pertanyaan FAQ; jawabannya membuka dan menutup dengan animasi tinggi (grid 0fr ke 1fr). */
+function FaqItem({ question, answer }: Faq) {
+    const [open, setOpen] = useState(false);
+    const id = useId();
+
+    return (
+        <div className="border-b border-line">
+            <h3>
+                <button
+                    type="button"
+                    aria-expanded={open}
+                    aria-controls={id}
+                    onClick={() => setOpen((v) => !v)}
+                    className="flex w-full items-center justify-between gap-4 py-4 text-left font-display text-xl font-semibold hover:text-signal"
+                >
+                    {question}
+                    <span
+                        aria-hidden
+                        className={cn(
+                            'text-2xl leading-none text-signal transition-transform duration-300 ease-out',
+                            open && 'rotate-45',
+                        )}
+                    >
+                        +
+                    </span>
+                </button>
+            </h3>
+            <div
+                id={id}
+                role="region"
+                inert={!open}
+                className={cn(
+                    'grid transition-[grid-template-rows,opacity] duration-300 ease-out',
+                    open
+                        ? 'grid-rows-[1fr] opacity-100'
+                        : 'grid-rows-[0fr] opacity-0',
+                )}
+            >
+                <div className="overflow-hidden">
+                    <p className="max-w-prose pb-5 text-steel">{answer}</p>
+                </div>
+            </div>
+        </div>
     );
 }
