@@ -42,7 +42,7 @@ export default function Contact({ seo, product, topic }: Props) {
                             )}
                             target="_blank"
                             rel="noopener"
-                            className="flex items-center gap-3 rounded-sm bg-clinic px-5 py-4 font-semibold text-white hover:bg-[#256649]"
+                            className="flex items-center gap-3 rounded-sm bg-clinic px-5 py-4 font-semibold text-white hover:bg-clinic-dark"
                         >
                             <WhatsAppIcon className="size-6" />
                             {t('Chat WhatsApp')}

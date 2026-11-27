@@ -3,8 +3,8 @@
 @source '../views';
 
 /*
- * Palet diambil dari logo KMS: oranye (signal) dan hijau (clinic) di atas putih klinis.
- * signal #C2410C dipakai untuk tombol karena kontrasnya dengan teks putih ≥ 4.5:1.
+ * Palet diambil dari logo KMS: merah huruf K (signal) dan hijau daun (clinic) di atas putih klinis.
+ * signal #B83336 = merah tulisan logo, kontras dengan teks putih 5.9:1; clinic digelapkan dari #6EBF47 agar lolos 4.5:1.
  */
 @theme {
     --font-sans: 'Barlow', ui-sans-serif, system-ui, sans-serif;
@@ -17,10 +17,11 @@
     --color-plate: #eceeeb;
     --color-line: #d9dedb;
     --color-steel: #5b6b76;
-    --color-signal: #c2410c;
-    --color-signal-dark: #9a3412;
-    --color-signal-bright: #ea580c;
-    --color-clinic: #2f7d5b;
+    --color-signal: #b83336;
+    --color-signal-dark: #932629;
+    --color-signal-bright: #c62220;
+    --color-clinic: #367a2f;
+    --color-clinic-dark: #2c6527;
 
     --animate-reveal: reveal 900ms cubic-bezier(0.2, 0.7, 0.1, 1) both;
 

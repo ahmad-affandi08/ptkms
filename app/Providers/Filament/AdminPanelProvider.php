@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->darkModeBrandLogo(asset('images/logo-mark.png'))
             ->brandLogoHeight('2.25rem')
             ->favicon(asset('favicon.ico'))
-            ->colors(['primary' => Color::Orange])
+            ->colors(['primary' => Color::hex('#b83336')])
             ->navigationGroups(['Inbox', 'Konten', 'Perusahaan', 'Sistem'])
             ->sidebarCollapsibleOnDesktop()
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')

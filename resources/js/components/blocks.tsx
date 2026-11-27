@@ -179,7 +179,7 @@ export function ContactBand() {
                             href={waLink(site.whatsapp)}
                             target="_blank"
                             rel="noopener"
-                            className="inline-flex items-center gap-2 rounded-sm bg-clinic px-5 py-3 font-semibold text-white hover:bg-[#256649]"
+                            className="inline-flex items-center gap-2 rounded-sm bg-clinic px-5 py-3 font-semibold text-white hover:bg-clinic-dark"
                         >
                             <WhatsAppIcon className="size-5" />
                             {t('Chat WhatsApp')}
