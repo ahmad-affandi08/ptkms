@@ -46,7 +46,7 @@ export function PageHeader({
                     {caption && (
                         <figcaption
                             aria-hidden
-                            className="absolute bottom-0 left-0 flex items-center gap-2.5 bg-ink px-4 py-2.5 text-sm text-paper"
+                            className="absolute bottom-0 left-0 flex items-center gap-2.5 bg-white px-4 py-2.5 text-sm text-ink"
                         >
                             <span className="size-2 bg-signal-bright" />
                             {caption}
@@ -259,7 +259,7 @@ export function ContactBand() {
     const { t, lp } = useT();
 
     return (
-        <section className="bg-ink text-paper">
+        <section className="bg-flame text-ink [--color-signal-bright:var(--color-ink)]">
             <Container className="grid gap-8 py-16 lg:grid-cols-12 lg:items-end lg:py-20">
                 <div className="lg:col-span-7">
                     <h2 className="text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">
@@ -267,7 +267,7 @@ export function ContactBand() {
                             'Alat butuh servis, atau sedang menyiapkan pengadaan?',
                         )}
                     </h2>
-                    <p className="mt-3 max-w-xl text-paper/75">
+                    <p className="mt-3 max-w-xl text-ink/85">
                         {t(
                             'Ceritakan kebutuhan Anda. Tim kami membalas pada jam kerja.',
                         )}
@@ -287,7 +287,7 @@ export function ContactBand() {
                     )}
                     <Link
                         href={lp('/kontak')}
-                        className="rounded-sm border border-paper/40 px-5 py-3 font-semibold hover:border-paper hover:bg-paper hover:text-ink"
+                        className="rounded-sm bg-white px-5 py-3 font-semibold hover:bg-paper"
                     >
                         {t('Isi formulir')}
                     </Link>

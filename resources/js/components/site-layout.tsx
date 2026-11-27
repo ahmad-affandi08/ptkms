@@ -174,10 +174,10 @@ function SiteFooter() {
     const shopName = (k: string) => (k === 'shopee' ? 'Shopee' : 'Tokopedia');
 
     return (
-        <footer className="bg-ink text-paper/80">
+        <footer className="bg-flame text-ink [--color-signal-bright:var(--color-ink)]">
             <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-12">
                 <div className="md:col-span-5">
-                    <p className="font-display text-2xl font-semibold text-paper">
+                    <p className="font-display text-2xl font-semibold">
                         {site.name}
                     </p>
                     {site.about_short && (
@@ -194,7 +194,7 @@ function SiteFooter() {
                     <p className="mt-3 space-y-1">
                         {site.phone && (
                             <a
-                                className="block hover:text-paper"
+                                className="block hover:underline"
                                 href={`tel:${site.phone.replace(/[^\d+]/g, '')}`}
                             >
                                 {site.phone}
@@ -202,7 +202,7 @@ function SiteFooter() {
                         )}
                         {site.email && (
                             <a
-                                className="block hover:text-paper"
+                                className="block hover:underline"
                                 href={`mailto:${site.email}`}
                             >
                                 {site.email}
@@ -217,9 +217,7 @@ function SiteFooter() {
                 <div className="grid grid-cols-2 gap-6 text-[0.95rem] md:col-span-3 md:grid-cols-1">
                     {social.length > 0 && (
                         <div>
-                            <p className="font-semibold text-paper">
-                                {t('Ikuti kami')}
-                            </p>
+                            <p className="font-semibold">{t('Ikuti kami')}</p>
                             <ul className="mt-3 flex flex-wrap gap-2">
                                 {social.map(([k, href]) => {
                                     const icon = SOCIAL_ICONS[k];
@@ -232,7 +230,7 @@ function SiteFooter() {
                                                 rel="noopener"
                                                 aria-label={icon?.name ?? k}
                                                 title={icon?.name ?? k}
-                                                className="grid size-11 place-items-center rounded-sm border border-paper/20 text-paper hover:border-paper hover:bg-paper hover:text-ink"
+                                                className="grid size-11 place-items-center rounded-sm border border-ink/30 hover:border-white hover:bg-white"
                                             >
                                                 {icon ? (
                                                     <SocialIcon
@@ -251,7 +249,7 @@ function SiteFooter() {
                     )}
                     {shops.length > 0 && (
                         <div>
-                            <p className="font-semibold text-paper">
+                            <p className="font-semibold">
                                 {t('Belanja online')}
                             </p>
                             <ul className="mt-3 flex flex-wrap gap-2">
@@ -261,7 +259,7 @@ function SiteFooter() {
                                             href={href}
                                             target="_blank"
                                             rel="noopener"
-                                            className="flex h-11 items-center rounded-sm bg-white px-3.5 outline-offset-2 hover:ring-2 hover:ring-paper/60"
+                                            className="flex h-11 items-center rounded-sm bg-white px-3.5 outline-offset-2 hover:ring-2 hover:ring-ink/40"
                                         >
                                             <img
                                                 src={`/images/brands/${k}.svg`}
@@ -282,13 +280,13 @@ function SiteFooter() {
                     )}
                 </div>
             </div>
-            <div className="border-t border-white/10">
+            <div className="border-t border-ink/15">
                 <div className="mx-auto flex max-w-7xl flex-wrap justify-between gap-2 py-5 pr-20 pl-4 text-sm sm:pr-24 sm:pl-6">
                     <p>
                         © {new Date().getFullYear()} {site.name}.{' '}
                         {t('Semua hak dilindungi.')}
                     </p>
-                    <Link href={lp('/galeri')} className="hover:text-paper">
+                    <Link href={lp('/galeri')} className="hover:underline">
                         {t('Galeri')}
                     </Link>
                 </div>
@@ -333,7 +331,7 @@ function LanguageSwitch({ url, current }: { url: string; current: Locale }) {
                             className={cn(
                                 'flex items-center gap-1.5 rounded-[2px] px-2 py-1.5 text-xs font-semibold',
                                 active
-                                    ? 'bg-ink text-paper'
+                                    ? 'bg-signal text-white'
                                     : 'text-steel hover:text-ink',
                             )}
                         >

@@ -17,7 +17,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="theme-color" content="#1c1b1a">
+        <meta name="theme-color" content="#f6f6f4">
 
         <link rel="icon" href="/favicon.ico" sizes="any">
         <link rel="icon" href="/images/icon-192.png" type="image/png" sizes="192x192">

@@ -70,7 +70,7 @@ export default function Home({
                         {hero.caption && (
                             <figcaption
                                 aria-hidden
-                                className="absolute bottom-0 left-0 flex items-center gap-2.5 bg-ink px-4 py-2.5 text-sm text-paper"
+                                className="absolute bottom-0 left-0 flex items-center gap-2.5 bg-white px-4 py-2.5 text-sm text-ink"
                             >
                                 <span className="size-2 bg-signal-bright" />
                                 {hero.caption}
@@ -115,14 +115,14 @@ export default function Home({
             </section>
 
             {field.length > 0 && (
-                <section className="bg-ink py-16 text-paper lg:py-24">
+                <section className="bg-flame py-16 text-ink [--color-signal-bright:var(--color-ink)] lg:py-24">
                     <Container>
                         <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
                             <div className="max-w-xl">
                                 <h2 className="text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">
                                     {t('Di lapangan')}
                                 </h2>
-                                <p className="mt-3 text-paper/70">
+                                <p className="mt-3 text-ink/85">
                                     {t(
                                         'Dokumentasi pekerjaan tim kami di rumah sakit.',
                                     )}
@@ -130,7 +130,7 @@ export default function Home({
                             </div>
                             <Link
                                 href={lp('/galeri')}
-                                className="font-semibold underline decoration-signal-bright decoration-2 underline-offset-4 hover:text-white"
+                                className="font-semibold underline decoration-2 underline-offset-4 hover:decoration-4"
                             >
                                 {t('Lihat galeri')}
                             </Link>
@@ -143,10 +143,10 @@ export default function Home({
                                             image={item.image}
                                             alt={item.caption ?? ''}
                                             sizes="(min-width: 1024px) 25vw, 50vw"
-                                            className="aspect-[3/4] w-full bg-ink-soft"
+                                            className="aspect-[3/4] w-full bg-black/10"
                                         />
                                         {item.caption && (
-                                            <figcaption className="mt-3 text-sm text-paper/75">
+                                            <figcaption className="mt-3 text-sm text-ink/85">
                                                 {item.caption}
                                             </figcaption>
                                         )}

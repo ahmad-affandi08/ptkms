@@ -6,7 +6,8 @@
  * Palet mengikuti logo KMS: merah (signal, tombol), oranye (signal-bright, garis & penanda),
  * hijau daun (clinic, WhatsApp), di atas hitam arang netral seperti tulisan logo (ink), tanpa biru.
  * signal #B83336 dengan teks putih 5.9:1; signal-bright #E06A1A hanya untuk elemen non-teks (≥3:1);
- * clinic digelapkan dari #6EBF47 agar lolos 4.5:1.
+ * clinic digelapkan dari #6EBF47 agar lolos 4.5:1. flame #F18139 = oranye tulisan logo, latar bagian besar
+ * (footer, ajakan kontak, Di lapangan) dengan teks ink 6.5:1; teks putih di atasnya tidak lolos.
  */
 @theme {
     --font-sans: 'Barlow', ui-sans-serif, system-ui, sans-serif;
@@ -22,6 +23,7 @@
     --color-signal: #b83336;
     --color-signal-dark: #932629;
     --color-signal-bright: #e06a1a;
+    --color-flame: #f18139;
     --color-clinic: #367a2f;
     --color-clinic-dark: #2c6527;
 

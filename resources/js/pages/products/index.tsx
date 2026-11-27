@@ -73,7 +73,7 @@ export default function Products({
                     />
                     <button
                         type="submit"
-                        className="rounded-r-sm bg-ink px-5 font-semibold text-paper hover:bg-ink-soft"
+                        className="rounded-r-sm bg-signal px-5 font-semibold text-white hover:bg-signal-dark"
                     >
                         {t('Cari')}
                     </button>
@@ -106,7 +106,7 @@ export default function Products({
                                             className={cn(
                                                 'block rounded-sm border border-line px-3 py-1.5 whitespace-nowrap lg:border-0 lg:border-l-2 lg:border-transparent lg:px-3 lg:py-2',
                                                 active
-                                                    ? 'border-ink bg-ink text-paper lg:border-signal-bright lg:bg-transparent lg:font-semibold lg:text-ink'
+                                                    ? 'border-signal bg-signal text-white lg:border-signal-bright lg:bg-transparent lg:font-semibold lg:text-ink'
                                                     : 'hover:text-signal',
                                             )}
                                         >
