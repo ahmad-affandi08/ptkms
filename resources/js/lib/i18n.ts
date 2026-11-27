@@ -96,6 +96,7 @@ const en = {
     'Belanja online': 'Shop online',
     'Semua hak dilindungi.': 'All rights reserved.',
     Pengalaman: 'Experience',
+    Bahasa: 'Language',
     'Langsung ke konten': 'Skip to content',
 } as const;
 

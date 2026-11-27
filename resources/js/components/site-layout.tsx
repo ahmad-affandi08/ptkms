@@ -1,7 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Menu, X } from 'lucide-react';
+import { Check, ChevronDown, Menu, X } from 'lucide-react';
 import type { ReactNode } from 'react';
-import { useEffect, useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { SOCIAL_ICONS, SocialIcon } from '@/components/brand-icons';
 import { useT } from '@/lib/i18n';
 import type { TranslationKey } from '@/lib/i18n';
@@ -313,35 +313,95 @@ const LANGUAGES: { locale: Locale; code: string; name: string }[] = [
     { locale: 'en', code: 'EN', name: 'English' },
 ];
 
-/** Pilihan bahasa dengan bendera negara; bahasa aktif ditandai. */
+/** Dropdown pilihan bahasa dengan bendera negara. */
 function LanguageSwitch({ url, current }: { url: string; current: Locale }) {
-    return (
-        <ul className="flex items-center rounded-sm border border-line bg-white p-0.5">
-            {LANGUAGES.map(({ locale, code, name }) => {
-                const active = locale === current;
+    const { t } = useT();
+    const [open, setOpen] = useState(false);
+    const ref = useRef<HTMLDivElement>(null);
+    const menuId = useId();
+    const active = LANGUAGES.find((l) => l.locale === current) ?? LANGUAGES[0];
 
-                return (
-                    <li key={locale}>
-                        <Link
-                            href={switchLocalePath(url, locale)}
-                            hrefLang={locale}
-                            lang={locale}
-                            aria-label={name}
-                            aria-current={active ? 'true' : undefined}
-                            className={cn(
-                                'flex items-center gap-1.5 rounded-[2px] px-2 py-1.5 text-xs font-semibold',
-                                active
-                                    ? 'bg-signal text-white'
-                                    : 'text-steel hover:text-ink',
-                            )}
-                        >
-                            <Flag locale={locale} />
-                            <span className="hidden sm:inline">{code}</span>
-                        </Link>
-                    </li>
-                );
-            })}
-        </ul>
+    useEffect(() => setOpen(false), [url]);
+
+    useEffect(() => {
+        if (!open) {
+            return;
+        }
+
+        const onDown = (e: MouseEvent) => {
+            if (!ref.current?.contains(e.target as Node)) {
+                setOpen(false);
+            }
+        };
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                setOpen(false);
+                ref.current?.querySelector('button')?.focus();
+            }
+        };
+        document.addEventListener('mousedown', onDown);
+        document.addEventListener('keydown', onKey);
+
+        return () => {
+            document.removeEventListener('mousedown', onDown);
+            document.removeEventListener('keydown', onKey);
+        };
+    }, [open]);
+
+    return (
+        <div ref={ref} className="relative">
+            <button
+                type="button"
+                aria-expanded={open}
+                aria-controls={menuId}
+                aria-label={`${t('Bahasa')}: ${active.name}`}
+                onClick={() => setOpen((v) => !v)}
+                className="flex items-center gap-1.5 rounded-sm border border-line bg-white px-2.5 py-2 text-xs font-semibold hover:border-ink/40"
+            >
+                <Flag locale={active.locale} />
+                <span>{active.code}</span>
+                <ChevronDown
+                    aria-hidden
+                    className={cn(
+                        'size-3.5 text-steel transition-transform',
+                        open && 'rotate-180',
+                    )}
+                />
+            </button>
+            {open && (
+                <ul
+                    id={menuId}
+                    className="absolute right-0 z-50 mt-1 min-w-44 rounded-sm border border-line bg-white py-1 shadow-lg shadow-ink/10"
+                >
+                    {LANGUAGES.map(({ locale, name }) => (
+                        <li key={locale}>
+                            <Link
+                                href={switchLocalePath(url, locale)}
+                                hrefLang={locale}
+                                lang={locale}
+                                aria-current={
+                                    locale === current ? 'true' : undefined
+                                }
+                                className={cn(
+                                    'flex items-center gap-2.5 px-3 py-2.5 text-sm whitespace-nowrap hover:bg-paper',
+                                    locale === current &&
+                                        'font-semibold text-signal',
+                                )}
+                            >
+                                <Flag locale={locale} />
+                                {name}
+                                {locale === current && (
+                                    <Check
+                                        aria-hidden
+                                        className="ml-auto size-4"
+                                    />
+                                )}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            )}
+        </div>
     );
 }
 
