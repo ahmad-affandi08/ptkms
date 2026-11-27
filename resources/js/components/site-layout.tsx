@@ -2,6 +2,7 @@ import { Link, usePage } from '@inertiajs/react';
 import { Menu, X } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useEffect, useId, useState } from 'react';
+import { SOCIAL_ICONS, SocialIcon } from '@/components/brand-icons';
 import { useT } from '@/lib/i18n';
 import type { TranslationKey } from '@/lib/i18n';
 import type { Locale } from '@/types';
@@ -170,9 +171,7 @@ function SiteFooter() {
     const shops = Object.entries(site.social).filter(([k]) =>
         ['tokopedia', 'shopee'].includes(k),
     );
-    const label = (k: string) =>
-        ({ youtube: 'YouTube', linkedin: 'LinkedIn' })[k] ??
-        k.charAt(0).toUpperCase() + k.slice(1);
+    const shopName = (k: string) => (k === 'shopee' ? 'Shopee' : 'Tokopedia');
 
     return (
         <footer className="bg-ink text-paper/80">
@@ -221,19 +220,32 @@ function SiteFooter() {
                             <p className="font-semibold text-paper">
                                 {t('Ikuti kami')}
                             </p>
-                            <ul className="mt-2 space-y-1">
-                                {social.map(([k, href]) => (
-                                    <li key={k}>
-                                        <a
-                                            className="hover:text-paper"
-                                            href={href}
-                                            target="_blank"
-                                            rel="noopener"
-                                        >
-                                            {label(k)}
-                                        </a>
-                                    </li>
-                                ))}
+                            <ul className="mt-3 flex flex-wrap gap-2">
+                                {social.map(([k, href]) => {
+                                    const icon = SOCIAL_ICONS[k];
+
+                                    return (
+                                        <li key={k}>
+                                            <a
+                                                href={href}
+                                                target="_blank"
+                                                rel="noopener"
+                                                aria-label={icon?.name ?? k}
+                                                title={icon?.name ?? k}
+                                                className="grid size-11 place-items-center rounded-sm border border-paper/20 text-paper hover:border-paper hover:bg-paper hover:text-ink"
+                                            >
+                                                {icon ? (
+                                                    <SocialIcon
+                                                        path={icon.path}
+                                                        className="size-5"
+                                                    />
+                                                ) : (
+                                                    k.charAt(0).toUpperCase()
+                                                )}
+                                            </a>
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         </div>
                     )}
@@ -242,16 +254,26 @@ function SiteFooter() {
                             <p className="font-semibold text-paper">
                                 {t('Belanja online')}
                             </p>
-                            <ul className="mt-2 space-y-1">
+                            <ul className="mt-3 flex flex-wrap gap-2">
                                 {shops.map(([k, href]) => (
                                     <li key={k}>
                                         <a
-                                            className="hover:text-paper"
                                             href={href}
                                             target="_blank"
                                             rel="noopener"
+                                            className="flex h-11 items-center rounded-sm bg-white px-3.5 outline-offset-2 hover:ring-2 hover:ring-paper/60"
                                         >
-                                            {label(k)}
+                                            <img
+                                                src={`/images/brands/${k}.svg`}
+                                                alt={shopName(k)}
+                                                loading="lazy"
+                                                className={cn(
+                                                    'w-auto',
+                                                    k === 'shopee'
+                                                        ? 'h-6'
+                                                        : 'h-[18px]',
+                                                )}
+                                            />
                                         </a>
                                     </li>
                                 ))}
