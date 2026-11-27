@@ -36,13 +36,16 @@ class SiteController extends Controller
                 'caption' => isset($s['hero_image']) ? null : Translation::pick(['id' => 'Pemeriksaan mesin anestesi di kamar operasi', 'en' => 'Checking an anaesthesia machine in an operating room']),
             ],
             'field' => GalleryItem::visible()->with('media')->limit(4)->get()->map->toPublic(),
+            'about' => Translation::pick($s['about'] ?? null),
             'stats' => array_map(fn (array $row) => ['value' => $row['value'], 'label' => Translation::pick($row['label'] ?? null)], $s['stats'] ?? []),
             'services' => Service::visible()->get()->map->toPublic(),
-            'products' => Product::visible()->where('is_featured', true)->with('category', 'brand', 'media')->limit(8)->get()->map->toPublic(),
+            // Produk unggulan dulu, sisanya produk terbaru, supaya bagian ini terisi selama katalog tidak kosong.
+            'products' => Product::visible()->reorder()->orderByDesc('is_featured')->orderBy('sort')->latest('id')->with('category', 'brand', 'media')->limit(8)->get()->map->toPublic(),
             'brands' => Partner::visible()->where('type', 'brand')->with('media')->get()->map->toPublic(),
             'clients' => Partner::visible()->where('type', 'client')->with('media')->get()->map->toPublic(),
             'projects' => Project::visible()->with('media')->limit(3)->get()->map->toPublic(),
             'testimonials' => Testimonial::visible()->limit(3)->get()->map->toPublic(),
+            'posts' => Post::visible()->with('media')->limit(3)->get()->map->toPublic(),
         ]);
     }
 

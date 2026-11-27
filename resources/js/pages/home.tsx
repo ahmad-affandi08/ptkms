@@ -2,6 +2,7 @@ import { Link, usePage } from '@inertiajs/react';
 import {
     ContactBand,
     Container,
+    Empty,
     LocationSection,
     ProductCard,
     SectionHeading,
@@ -10,10 +11,11 @@ import {
 import Img from '@/components/img';
 import Seo from '@/components/seo';
 import { useT } from '@/lib/i18n';
-import { cn } from '@/lib/utils';
+import { cn, formatDate } from '@/lib/utils';
 import type {
     GalleryItem,
     Partner,
+    Post,
     Product,
     Project,
     Seo as SeoData,
@@ -30,6 +32,8 @@ type Props = {
         caption: string | null;
     };
     field: GalleryItem[];
+    about: string | null;
+    posts: Post[];
     stats: { value: string; label: string }[];
     services: Service[];
     products: Product[];
@@ -43,6 +47,8 @@ export default function Home({
     seo,
     hero,
     field,
+    about,
+    posts,
     stats,
     services,
     products,
@@ -52,7 +58,10 @@ export default function Home({
     testimonials,
 }: Props) {
     const { site } = usePage().props;
-    const { t, lp } = useT();
+    const { t, lp, locale } = useT();
+    const shops = (['tokopedia', 'shopee'] as const).filter(
+        (k) => site.social[k],
+    );
 
     return (
         <>
@@ -114,6 +123,67 @@ export default function Home({
                 </Container>
             </section>
 
+            {(about || site.about_short) && (
+                <section className="py-16 lg:py-24">
+                    <Container className="grid gap-8 lg:grid-cols-12">
+                        <h2 className="text-3xl leading-tight font-semibold tracking-tight sm:text-4xl lg:col-span-4">
+                            {t('Tentang kami')}
+                        </h2>
+                        <div className="lg:col-span-8">
+                            <p className="max-w-3xl font-display text-2xl leading-snug font-medium sm:text-3xl">
+                                {about?.split(/\n{2,}/)[0] ?? site.about_short}
+                            </p>
+                            <div className="mt-6">
+                                <TextLink href={lp('/tentang')}>
+                                    {t('Profil lengkap')}
+                                </TextLink>
+                            </div>
+                        </div>
+                    </Container>
+                </section>
+            )}
+
+            {services.length > 0 && (
+                <section className="border-t border-line py-16 lg:py-24">
+                    <Container>
+                        <SectionHeading
+                            title={t('Yang kami kerjakan')}
+                            action={
+                                <TextLink href={lp('/layanan')}>
+                                    {t('Semua layanan')}
+                                </TextLink>
+                            }
+                            intro={t(
+                                'Dari pengadaan sampai perawatan rutin, satu tim yang sama menangani alat Anda.',
+                            )}
+                        />
+                        <ul className="border-t border-ink">
+                            {services.map((s) => (
+                                <li
+                                    key={s.slug}
+                                    className="group relative grid gap-2 border-b border-line py-6 md:grid-cols-12 md:items-baseline md:gap-8"
+                                >
+                                    <h3 className="text-2xl font-semibold md:col-span-4">
+                                        <Link
+                                            href={lp(`/layanan/${s.slug}`)}
+                                            className="group-hover:text-signal after:absolute after:inset-0"
+                                        >
+                                            {s.title}
+                                        </Link>
+                                    </h3>
+                                    <p className="text-steel md:col-span-6">
+                                        {s.excerpt}
+                                    </p>
+                                    <span className="text-sm font-semibold text-signal md:col-span-2 md:text-right">
+                                        {t('Selengkapnya')}
+                                    </span>
+                                </li>
+                            ))}
+                        </ul>
+                    </Container>
+                </section>
+            )}
+
             {field.length > 0 && (
                 <section className="bg-flame py-16 text-ink [--color-signal-bright:var(--color-ink)] lg:py-24">
                     <Container>
@@ -158,77 +228,84 @@ export default function Home({
                 </section>
             )}
 
-            {services.length > 0 && (
-                <section className="py-16 lg:py-24">
-                    <Container>
-                        <SectionHeading
-                            title={t('Yang kami kerjakan')}
-                            intro={t(
-                                'Dari pengadaan sampai perawatan rutin, satu tim yang sama menangani alat Anda.',
-                            )}
-                        />
-                        <ul className="border-t border-ink">
-                            {services.map((s) => (
-                                <li
-                                    key={s.slug}
-                                    className="group relative grid gap-2 border-b border-line py-6 md:grid-cols-12 md:items-baseline md:gap-8"
-                                >
-                                    <h3 className="text-2xl font-semibold md:col-span-4">
-                                        <Link
-                                            href={lp(`/layanan/${s.slug}`)}
-                                            className="group-hover:text-signal after:absolute after:inset-0"
-                                        >
-                                            {s.title}
-                                        </Link>
-                                    </h3>
-                                    <p className="text-steel md:col-span-6">
-                                        {s.excerpt}
-                                    </p>
-                                    <span className="text-sm font-semibold text-signal md:col-span-2 md:text-right">
-                                        {t('Selengkapnya')}
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
-                    </Container>
-                </section>
-            )}
-
-            {products.length > 0 && (
-                <section className="border-t border-line bg-white py-16 lg:py-24">
-                    <Container>
-                        <SectionHeading
-                            title={t('Produk unggulan')}
-                            action={
-                                <TextLink href={lp('/produk')}>
-                                    {t('Semua produk')}
-                                </TextLink>
-                            }
-                        />
+            <section className="border-t border-line bg-white py-16 lg:py-24">
+                <Container>
+                    <SectionHeading
+                        title={t('Produk')}
+                        intro={t(
+                            'Alat kesehatan dan elektromedis untuk rumah sakit dan klinik.',
+                        )}
+                        action={
+                            <TextLink href={lp('/produk')}>
+                                {t('Semua produk')}
+                            </TextLink>
+                        }
+                    />
+                    {products.length > 0 ? (
                         <div className="grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-4">
                             {products.map((p) => (
                                 <ProductCard key={p.slug} product={p} />
                             ))}
                         </div>
-                    </Container>
-                </section>
-            )}
+                    ) : (
+                        <div className="flex flex-col gap-6 border border-dashed border-line px-6 py-10 lg:flex-row lg:items-center lg:justify-between">
+                            <p className="max-w-xl text-steel">
+                                {t(
+                                    'Katalog online sedang kami lengkapi. Untuk daftar alat dan harga, minta penawaran atau kunjungi toko online kami.',
+                                )}
+                            </p>
+                            <div className="flex flex-wrap items-center gap-3">
+                                <Link
+                                    href={lp('/kontak?perlu=quotation')}
+                                    className="rounded-sm bg-signal px-5 py-3 font-semibold text-white hover:bg-signal-dark"
+                                >
+                                    {t('Minta penawaran')}
+                                </Link>
+                                {shops.map((k) => (
+                                    <a
+                                        key={k}
+                                        href={site.social[k]}
+                                        target="_blank"
+                                        rel="noopener"
+                                        className="flex h-12 items-center rounded-sm border border-line px-4 hover:border-ink/40"
+                                    >
+                                        <img
+                                            src={`/images/brands/${k}.svg`}
+                                            alt={
+                                                k === 'shopee'
+                                                    ? 'Shopee'
+                                                    : 'Tokopedia'
+                                            }
+                                            loading="lazy"
+                                            className={
+                                                k === 'shopee'
+                                                    ? 'h-6'
+                                                    : 'h-[18px]'
+                                            }
+                                        />
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </Container>
+            </section>
 
             {brands.length > 0 && (
                 <LogoRow title={t('Brand yang kami tangani')} items={brands} />
             )}
 
-            {projects.length > 0 && (
-                <section className="py-16 lg:py-24">
-                    <Container>
-                        <SectionHeading
-                            title={t('Proyek terbaru')}
-                            action={
-                                <TextLink href={lp('/proyek')}>
-                                    {t('Semua proyek')}
-                                </TextLink>
-                            }
-                        />
+            <section className="py-16 lg:py-24">
+                <Container>
+                    <SectionHeading
+                        title={t('Proyek terbaru')}
+                        action={
+                            <TextLink href={lp('/proyek')}>
+                                {t('Semua proyek')}
+                            </TextLink>
+                        }
+                    />
+                    {projects.length > 0 ? (
                         <div className="grid gap-10 md:grid-cols-3">
                             {projects.map((p) => (
                                 <article
@@ -257,9 +334,21 @@ export default function Home({
                                 </article>
                             ))}
                         </div>
-                    </Container>
-                </section>
-            )}
+                    ) : (
+                        <Empty>
+                            {t(
+                                'Dokumentasi proyek sedang kami siapkan. Sementara itu, lihat foto pekerjaan kami di galeri.',
+                            )}{' '}
+                            <Link
+                                href={lp('/galeri')}
+                                className="font-semibold text-signal underline underline-offset-4"
+                            >
+                                {t('Lihat galeri')}
+                            </Link>
+                        </Empty>
+                    )}
+                </Container>
+            </section>
 
             {testimonials.length > 0 && (
                 <section className="border-t border-line py-16 lg:py-24">
@@ -287,6 +376,52 @@ export default function Home({
                     </Container>
                 </section>
             )}
+
+            <section className="border-t border-line py-16 lg:py-24">
+                <Container>
+                    <SectionHeading
+                        title={t('Artikel terbaru')}
+                        action={
+                            <TextLink href={lp('/artikel')}>
+                                {t('Semua artikel')}
+                            </TextLink>
+                        }
+                    />
+                    {posts.length > 0 ? (
+                        <div className="grid gap-x-8 gap-y-12 md:grid-cols-3">
+                            {posts.map((p) => (
+                                <article
+                                    key={p.slug}
+                                    className="group relative"
+                                >
+                                    <Img
+                                        image={p.image}
+                                        alt={p.title}
+                                        sizes="(min-width: 768px) 33vw, 100vw"
+                                        className="aspect-[3/2] w-full"
+                                    />
+                                    <time
+                                        dateTime={p.published_at ?? undefined}
+                                        className="mt-4 block text-sm text-steel"
+                                    >
+                                        {formatDate(p.published_at, locale)}
+                                    </time>
+                                    <h3 className="mt-1 text-xl leading-snug font-semibold">
+                                        <Link
+                                            href={lp(`/artikel/${p.slug}`)}
+                                            className="group-hover:text-signal after:absolute after:inset-0"
+                                        >
+                                            {p.title}
+                                        </Link>
+                                    </h3>
+                                </article>
+                            ))}
+                        </div>
+                    ) : (
+                        <Empty>{t('Belum ada artikel.')}</Empty>
+                    )}
+                </Container>
+            </section>
 
             {clients.length > 0 && (
                 <LogoRow title={t('Dipercaya oleh')} items={clients} />

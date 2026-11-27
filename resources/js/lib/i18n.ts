@@ -20,6 +20,17 @@ const en = {
     'Dokumentasi pekerjaan tim kami di rumah sakit.':
         'Our team at work in hospitals.',
     'Lihat galeri': 'View gallery',
+    'Tentang kami': 'About us',
+    'Profil lengkap': 'Full company profile',
+    'Semua layanan': 'All services',
+    'Alat kesehatan dan elektromedis untuk rumah sakit dan klinik.':
+        'Medical and electromedical equipment for hospitals and clinics.',
+    'Katalog online sedang kami lengkapi. Untuk daftar alat dan harga, minta penawaran atau kunjungi toko online kami.':
+        'Our online catalogue is still being filled in. For equipment lists and prices, request a quote or visit our online stores.',
+    'Dokumentasi proyek sedang kami siapkan. Sementara itu, lihat foto pekerjaan kami di galeri.':
+        'Project write-ups are on the way. In the meantime, see our work in the gallery.',
+    'Artikel terbaru': 'Latest articles',
+    'Semua artikel': 'All articles',
     'Penyetelan lampu operasi': 'Adjusting an operating light',
     'Dari pengadaan sampai perawatan rutin, satu tim yang sama menangani alat Anda.':
         'From procurement to routine maintenance, the same team looks after your equipment.',
