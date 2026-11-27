@@ -20,26 +20,58 @@ export function Container({
     );
 }
 
-/** Judul halaman dalam: judul besar rata kiri dengan garis bawah tipis. */
+/** Judul halaman dalam: judul besar rata kiri, opsional foto lapangan di kanan (selebar tepi layar). */
 export function PageHeader({
     title,
     intro,
+    image,
+    caption,
     children,
 }: {
     title: string;
     intro?: string | null;
+    image?: string;
+    caption?: string;
     children?: ReactNode;
 }) {
     return (
-        <header className="border-b border-line">
-            <Container className="pt-12 pb-10 lg:pt-20 lg:pb-14">
-                <h1 className="max-w-4xl text-4xl leading-[1.05] font-semibold tracking-tight sm:text-5xl lg:text-6xl">
-                    {title}
-                </h1>
-                {intro && (
-                    <p className="mt-4 max-w-2xl text-lg text-steel">{intro}</p>
-                )}
-                {children}
+        <header className="relative border-b border-line">
+            {image && (
+                <figure className="relative lg:absolute lg:inset-y-0 lg:right-0 lg:w-[38%]">
+                    <img
+                        src={image}
+                        alt={caption ?? ''}
+                        className="aspect-[16/9] w-full animate-reveal object-cover object-[50%_45%] lg:aspect-auto lg:h-full"
+                    />
+                    {caption && (
+                        <figcaption
+                            aria-hidden
+                            className="absolute bottom-0 left-0 flex items-center gap-2.5 bg-ink px-4 py-2.5 text-sm text-paper"
+                        >
+                            <span className="size-2 bg-signal-bright" />
+                            {caption}
+                        </figcaption>
+                    )}
+                </figure>
+            )}
+            <Container className="relative">
+                <div
+                    className={cn(
+                        'pt-12 pb-10 lg:pt-20 lg:pb-14',
+                        image &&
+                            'lg:flex lg:min-h-[28rem] lg:w-[56%] lg:flex-col lg:justify-end',
+                    )}
+                >
+                    <h1 className="max-w-4xl text-4xl leading-[1.05] font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+                        {title}
+                    </h1>
+                    {intro && (
+                        <p className="mt-4 max-w-2xl text-lg text-steel">
+                            {intro}
+                        </p>
+                    )}
+                    {children}
+                </div>
             </Container>
         </header>
     );

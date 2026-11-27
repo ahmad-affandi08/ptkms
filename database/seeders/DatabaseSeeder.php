@@ -78,12 +78,22 @@ class DatabaseSeeder extends Seeder
                 'Saran teknis sebelum pembelian dan pelatihan penggunaan alat untuk tenaga kesehatan.',
                 'Technical advice before purchase and equipment training for healthcare staff.'],
         ];
+        $servicePhotos = [
+            'pengadaan-alat-kesehatan' => 'monitor-pasien',
+            'servis-dan-pemeliharaan' => 'perbaikan-mesin-anestesi',
+            'konsultasi-dan-pelatihan' => 'pelatihan-mesin-anestesi',
+        ];
         foreach ($services as $i => [$slug, $id, $en, $exId, $exEn]) {
-            Service::firstOrCreate(['slug' => $slug], [
+            $service = Service::firstOrCreate(['slug' => $slug], [
                 'title' => ['id' => $id, 'en' => $en],
                 'excerpt' => ['id' => $exId, 'en' => $exEn],
                 'sort' => $i,
             ]);
+            if (! $service->hasMedia('images')) {
+                $service->addMedia(public_path("images/field/{$servicePhotos[$slug]}.jpg"))
+                    ->preservingOriginal()
+                    ->toMediaCollection('images');
+            }
         }
 
         $faqs = [

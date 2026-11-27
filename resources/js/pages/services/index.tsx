@@ -24,15 +24,15 @@ export default function Services({
                 )}
             />
             <Container className="py-12 lg:py-20">
-                <div className="grid gap-x-10 gap-y-14 md:grid-cols-2">
+                <div className="grid gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
                     {services.map((s) => (
                         <article key={s.slug} className="group relative">
                             {s.image && (
                                 <Img
                                     image={s.image}
                                     alt={s.title}
-                                    sizes="(min-width: 768px) 50vw, 100vw"
-                                    className="mb-5 aspect-[16/9] w-full"
+                                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                                    className="mb-5 aspect-[4/5] w-full"
                                 />
                             )}
                             <h2 className="text-3xl font-semibold">

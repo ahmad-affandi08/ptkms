@@ -34,7 +34,12 @@ export default function About({
     return (
         <>
             <Seo seo={seo} fallbackTitle={t('Tentang')} />
-            <PageHeader title={site.name} intro={site.about_short} />
+            <PageHeader
+                title={site.name}
+                intro={site.about_short}
+                image="/images/field/lampu-operasi.jpg"
+                caption={t('Penyetelan lampu operasi')}
+            />
 
             {about && (
                 <Container className="grid gap-8 py-12 lg:grid-cols-12 lg:py-20">

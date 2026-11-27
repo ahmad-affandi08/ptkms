@@ -20,6 +20,7 @@ const en = {
     'Dokumentasi pekerjaan tim kami di rumah sakit.':
         'Our team at work in hospitals.',
     'Lihat galeri': 'View gallery',
+    'Penyetelan lampu operasi': 'Adjusting an operating light',
     'Dari pengadaan sampai perawatan rutin, satu tim yang sama menangani alat Anda.':
         'From procurement to routine maintenance, the same team looks after your equipment.',
     Selengkapnya: 'Read more',
