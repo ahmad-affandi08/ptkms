@@ -29,6 +29,7 @@ class HandleInertiaRequests extends Middleware
     {
         $s = Setting::get();
         $url = fn ($path) => $path ? Storage::disk('public')->url($path) : null;
+        $mapsQuery = $s['maps_query'] ?? null;
 
         return [
             'name' => $s['company_name'] ?? config('app.name'),
@@ -42,7 +43,9 @@ class HandleInertiaRequests extends Middleware
             'whatsapp' => $s['whatsapp'] ?? null,
             'address' => $s['address'] ?? null,
             'office_hours' => $s['office_hours'] ?? null,
-            'maps_url' => $s['maps_url'] ?? null,
+            'maps_url' => $s['maps_url'] ?? ($mapsQuery ? 'https://www.google.com/maps/search/?'.http_build_query(['api' => 1, 'query' => $mapsQuery]) : null),
+            // Embed tanpa API key, sama seperti situs lama.
+            'maps_embed' => $mapsQuery ? 'https://maps.google.com/maps?'.http_build_query(['q' => $mapsQuery, 'z' => 15, 'hl' => app()->getLocale(), 'output' => 'embed']) : null,
             'social' => array_filter($s['social'] ?? []),
             'turnstile_key' => config('services.turnstile.site_key'),
         ];

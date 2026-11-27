@@ -1,5 +1,5 @@
 import { usePage } from '@inertiajs/react';
-import { Container, PageHeader } from '@/components/blocks';
+import { Container, LocationSection, PageHeader } from '@/components/blocks';
 import InquiryForm from '@/components/inquiry-form';
 import Seo from '@/components/seo';
 import { WhatsAppIcon } from '@/components/site-layout';
@@ -49,36 +49,6 @@ export default function Contact({ seo, product, topic }: Props) {
                         </a>
                     )}
                     <dl className="space-y-6 border-t border-ink pt-6">
-                        {site.address && (
-                            <div>
-                                <dt className="text-sm text-steel">
-                                    {t('Alamat')}
-                                </dt>
-                                <dd className="mt-1 whitespace-pre-line">
-                                    {site.address}
-                                </dd>
-                                {site.maps_url && (
-                                    <dd className="mt-2">
-                                        <a
-                                            href={site.maps_url}
-                                            target="_blank"
-                                            rel="noopener"
-                                            className="font-semibold text-signal underline underline-offset-4"
-                                        >
-                                            {t('Buka di Google Maps')}
-                                        </a>
-                                    </dd>
-                                )}
-                            </div>
-                        )}
-                        {site.office_hours && (
-                            <div>
-                                <dt className="text-sm text-steel">
-                                    {t('Jam operasional')}
-                                </dt>
-                                <dd className="mt-1">{site.office_hours}</dd>
-                            </div>
-                        )}
                         {site.phone && (
                             <div>
                                 <dt className="text-sm text-steel">
@@ -110,6 +80,7 @@ export default function Contact({ seo, product, topic }: Props) {
                     </dl>
                 </aside>
             </Container>
+            <LocationSection />
         </>
     );
 }

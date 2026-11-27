@@ -84,7 +84,10 @@ class SiteSettings extends Page
                 TextInput::make('whatsapp')->label('WhatsApp (format 62…)')->regex('/^62\d{8,13}$/')->placeholder('6281319442002'),
                 TextInput::make('office_hours')->label('Jam operasional')->placeholder('Senin–Jumat, 09.00–17.00'),
                 Textarea::make('address')->label('Alamat')->rows(3)->columnSpanFull(),
-                TextInput::make('maps_url')->label('Link Google Maps')->url()->columnSpanFull(),
+                TextInput::make('maps_query')->label('Nama tempat di Google Maps')
+                    ->helperText('Teks yang dicari Google Maps untuk peta lokasi, misalnya "PT KMS Indonesia Serpong". Kosongkan untuk menyembunyikan peta.')
+                    ->columnSpanFull(),
+                TextInput::make('maps_url')->label('Link Google Maps')->helperText('Opsional. Jika kosong, tombol "Buka di Google Maps" memakai nama tempat di atas.')->url()->columnSpanFull(),
             ]),
             Section::make('Media sosial & marketplace')->columns(2)->schema([
                 TextInput::make('social.instagram')->label('Instagram')->url(),

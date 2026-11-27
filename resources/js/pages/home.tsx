@@ -2,6 +2,7 @@ import { Link, usePage } from '@inertiajs/react';
 import {
     ContactBand,
     Container,
+    LocationSection,
     ProductCard,
     SectionHeading,
     TextLink,
@@ -291,6 +292,7 @@ export default function Home({
                 <LogoRow title={t('Dipercaya oleh')} items={clients} />
             )}
 
+            <LocationSection />
             <ContactBand />
         </>
     );

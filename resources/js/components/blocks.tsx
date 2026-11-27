@@ -185,6 +185,74 @@ export function Pagination({ page }: { page: Paginated<unknown> }) {
     );
 }
 
+/** Alamat, jam operasional, dan peta Google Maps (dari Pengaturan Situs). */
+export function LocationSection() {
+    const { site } = usePage().props;
+    const { t } = useT();
+
+    if (!site.maps_embed && !site.address) {
+        return null;
+    }
+
+    return (
+        <section className="border-t border-line bg-white py-16 lg:py-24">
+            <Container className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+                <div className="lg:col-span-5">
+                    <h2 className="text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">
+                        {t('Lokasi kami')}
+                    </h2>
+                    <p className="mt-3 max-w-md text-steel">
+                        {t('Kunjungi kantor kami pada jam operasional.')}
+                    </p>
+                    <dl className="mt-8 space-y-6 border-t border-ink pt-6">
+                        {site.address && (
+                            <div>
+                                <dt className="text-sm text-steel">
+                                    {t('Alamat')}
+                                </dt>
+                                <dd className="mt-1 text-lg whitespace-pre-line">
+                                    {site.address}
+                                </dd>
+                            </div>
+                        )}
+                        {site.office_hours && (
+                            <div>
+                                <dt className="text-sm text-steel">
+                                    {t('Jam operasional')}
+                                </dt>
+                                <dd className="mt-1 text-lg">
+                                    {site.office_hours}
+                                </dd>
+                            </div>
+                        )}
+                    </dl>
+                    {site.maps_url && (
+                        <a
+                            href={site.maps_url}
+                            target="_blank"
+                            rel="noopener"
+                            className="mt-8 inline-block rounded-sm border border-ink/25 px-5 py-3 font-semibold hover:border-ink"
+                        >
+                            {t('Buka di Google Maps')}
+                        </a>
+                    )}
+                </div>
+                {site.maps_embed && (
+                    <div className="lg:col-span-7">
+                        <iframe
+                            src={site.maps_embed}
+                            title={t('Peta lokasi kantor')}
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            className="aspect-[4/3] w-full border border-line bg-plate lg:aspect-auto lg:h-full lg:min-h-[26rem]"
+                        />
+                    </div>
+                )}
+            </Container>
+        </section>
+    );
+}
+
 /** Ajakan kontak di akhir halaman. */
 export function ContactBand() {
     const { site } = usePage().props;

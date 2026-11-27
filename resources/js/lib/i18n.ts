@@ -71,6 +71,10 @@ const en = {
     'Jam operasional': 'Office hours',
     Telepon: 'Phone',
     'Buka di Google Maps': 'Open in Google Maps',
+    'Lokasi kami': 'Our location',
+    'Kunjungi kantor kami pada jam operasional.':
+        'Visit our office during business hours.',
+    'Peta lokasi kantor': 'Office location map',
     Nama: 'Name',
     'Instansi / rumah sakit': 'Institution / hospital',
     'Nomor HP / WhatsApp': 'Mobile / WhatsApp number',

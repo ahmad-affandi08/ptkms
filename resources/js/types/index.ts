@@ -21,6 +21,7 @@ export type Site = {
     address: string | null;
     office_hours: string | null;
     maps_url: string | null;
+    maps_embed: string | null;
     social: Partial<
         Record<
             | 'instagram'

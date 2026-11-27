@@ -56,6 +56,7 @@ class DatabaseSeeder extends Seeder
                 'phone' => '+62 813-1944-2002',
                 'whatsapp' => '6281319442002',
                 'office_hours' => 'Senin–Jumat, 09.00–17.00 WIB',
+                'maps_query' => 'PT KMS Indonesia Serpong',
                 'address' => "Ruko Natura Cattleya Utama No. 0578, Pengasinan,\nGunung Sindur, Kab. Bogor, Jawa Barat 16340",
                 'social' => [
                     'instagram' => 'https://www.instagram.com/kms_indonesia.id',
