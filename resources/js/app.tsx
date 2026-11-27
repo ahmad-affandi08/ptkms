@@ -7,5 +7,5 @@ void createInertiaApp({
     title: (title) => (title ? `${title} | ${appName}` : appName),
     layout: () => SiteLayout,
     strictMode: true,
-    progress: { color: '#c62220' },
+    progress: { color: '#e06a1a' },
 });

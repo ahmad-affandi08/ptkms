@@ -3,23 +3,25 @@
 @source '../views';
 
 /*
- * Palet diambil dari logo KMS: merah huruf K (signal) dan hijau daun (clinic) di atas putih klinis.
- * signal #B83336 = merah tulisan logo, kontras dengan teks putih 5.9:1; clinic digelapkan dari #6EBF47 agar lolos 4.5:1.
+ * Palet mengikuti logo KMS: merah (signal, tombol), oranye (signal-bright, garis & penanda),
+ * hijau daun (clinic, WhatsApp), di atas hitam arang netral seperti tulisan logo (ink), tanpa biru.
+ * signal #B83336 dengan teks putih 5.9:1; signal-bright #E06A1A hanya untuk elemen non-teks (≥3:1);
+ * clinic digelapkan dari #6EBF47 agar lolos 4.5:1.
  */
 @theme {
     --font-sans: 'Barlow', ui-sans-serif, system-ui, sans-serif;
     --font-display:
         'Barlow Semi Condensed', 'Barlow', ui-sans-serif, system-ui, sans-serif;
 
-    --color-ink: #14212b;
-    --color-ink-soft: #263643;
-    --color-paper: #f7f8f6;
-    --color-plate: #eceeeb;
-    --color-line: #d9dedb;
-    --color-steel: #5b6b76;
+    --color-ink: #1c1b1a;
+    --color-ink-soft: #2b2927;
+    --color-paper: #f6f6f4;
+    --color-plate: #ecebe8;
+    --color-line: #dcdad6;
+    --color-steel: #6b6661;
     --color-signal: #b83336;
     --color-signal-dark: #932629;
-    --color-signal-bright: #c62220;
+    --color-signal-bright: #e06a1a;
     --color-clinic: #367a2f;
     --color-clinic-dark: #2c6527;
 
