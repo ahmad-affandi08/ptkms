@@ -11,8 +11,6 @@ use Filament\Actions\EditAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -41,14 +39,15 @@ class PostResource extends Resource
         return $schema->columns(3)->components([
             Section::make()->columnSpan(2)->schema([
                 Localized::tabs(fn ($l, $primary) => [
-                    Localized::titleWithSlug('title', $l, $primary),
-                    Textarea::make("excerpt.{$l}")->label('Ringkasan')->rows(2)->maxLength(300),
+                    Localized::title('title', $l, $primary),
+                    Localized::excerpt($l),
                     RichEditor::make("body.{$l}")->label('Isi artikel')->required($primary),
                 ]),
             ]),
             Section::make()->columnSpan(1)->schema([
-                TextInput::make('slug')->required()->alphaDash()->unique(ignoreRecord: true),
-                DateTimePicker::make('published_at')->label('Terbit pada')->helperText('Kosongkan untuk menyimpan sebagai draf.'),
+                Localized::publicLink('/artikel'),
+                DateTimePicker::make('published_at')->label('Tanggal terbit')->default(now())->seconds(false)
+                    ->helperText('Otomatis hari ini. Kosongkan untuk menyimpan sebagai draf, atau isi tanggal nanti untuk terbit terjadwal.'),
                 SpatieMediaLibraryFileUpload::make('images')->label('Foto sampul')->collection('images')->image()->imageEditor()->maxSize(6144),
             ]),
             SeoFields::section(),

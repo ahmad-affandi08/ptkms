@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\AutoFills;
 use App\Models\Concerns\HasImages;
 use App\Models\Concerns\HasLocalized;
 use App\Models\Concerns\Listable;
@@ -11,7 +12,11 @@ use Spatie\MediaLibrary\HasMedia;
 
 class Product extends Model implements HasMedia
 {
-    use HasImages, HasLocalized, Listable;
+    use AutoFills, HasImages, HasLocalized, Listable;
+
+    public const SLUG_FROM = 'name';
+
+    public const EXCERPT_FROM = 'description';
 
     protected $guarded = [];
 

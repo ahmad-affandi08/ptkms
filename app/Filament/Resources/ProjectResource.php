@@ -9,7 +9,6 @@ use BackedEnum;
 use Filament\Actions\EditAction;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
@@ -41,16 +40,16 @@ class ProjectResource extends Resource
         return $schema->columns(3)->components([
             Section::make()->columnSpan(2)->schema([
                 Localized::tabs(fn ($l, $primary) => [
-                    Localized::titleWithSlug('title', $l, $primary),
-                    Textarea::make("excerpt.{$l}")->label('Ringkasan')->rows(2)->maxLength(300),
+                    Localized::title('title', $l, $primary),
+                    Localized::excerpt($l),
                     RichEditor::make("body.{$l}")->label('Cerita proyek'),
                 ]),
             ]),
             Section::make()->columnSpan(1)->schema([
-                TextInput::make('slug')->required()->alphaDash()->unique(ignoreRecord: true),
+                Localized::publicLink('/proyek'),
                 TextInput::make('client')->label('Klien / RS'),
                 TextInput::make('location')->label('Lokasi'),
-                TextInput::make('year')->label('Tahun')->numeric()->minValue(1990)->maxValue(2100),
+                TextInput::make('year')->label('Tahun')->numeric()->minValue(1990)->maxValue(2100)->default((int) date('Y')),
                 Toggle::make('is_published')->label('Tampilkan')->default(true),
                 SpatieMediaLibraryFileUpload::make('images')->label('Foto')->collection('images')->multiple()->reorderable()->image()->maxSize(6144),
             ]),

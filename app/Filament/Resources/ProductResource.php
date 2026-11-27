@@ -13,13 +13,11 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
-use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
@@ -28,7 +26,6 @@ use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Str;
 use UnitEnum;
 
 class ProductResource extends Resource
@@ -49,11 +46,9 @@ class ProductResource extends Resource
     {
         return $schema->columns(3)->components([
             Section::make('Produk')->columnSpan(2)->columns(2)->schema([
-                Select::make('type')->label('Jenis')->options(Product::TYPES)->default('device')->required()->live()->native(false)->columnSpanFull()
+                Select::make('type')->label('Jenis')->options(Product::TYPES)->default('device')->required()->selectablePlaceholder(false)->live()->native(false)->columnSpanFull()
                     ->helperText('Software: aplikasi seperti PACS. Kolom izin edar, brand, dan marketplace disembunyikan; isi link demo.'),
-                TextInput::make('name')->label('Nama produk')->required()->maxLength(200)->columnSpanFull()
-                    ->live(onBlur: true)
-                    ->afterStateUpdated(fn (Set $set, ?string $state, string $operation) => $operation === 'create' ? $set('slug', Str::slug((string) $state)) : null),
+                TextInput::make('name')->label('Nama produk')->required()->maxLength(200)->columnSpanFull(),
                 TextInput::make('model')->label('Tipe / model'),
                 TextInput::make('akl_number')->label('No. izin edar (AKL/AKD)')->visible(fn (Get $get) => $get('type') !== 'software'),
                 Select::make('product_category_id')->label('Kategori')
@@ -63,7 +58,7 @@ class ProductResource extends Resource
                     ->relationship('brand', 'name', fn (Builder $q) => $q->where('type', 'brand'))
                     ->searchable()->preload()->visible(fn (Get $get) => $get('type') !== 'software'),
                 Localized::tabs(fn ($l) => [
-                    Textarea::make("excerpt.{$l}")->label('Ringkasan')->rows(2)->maxLength(300),
+                    Localized::excerpt($l),
                     RichEditor::make("description.{$l}")->label('Deskripsi'),
                 ]),
                 Repeater::make('specs')->label('Spesifikasi')->columnSpanFull()->columns(2)->defaultItems(0)->reorderable()
@@ -73,7 +68,7 @@ class ProductResource extends Resource
                     ]),
             ]),
             Section::make()->columnSpan(1)->schema([
-                TextInput::make('slug')->required()->alphaDash()->unique(ignoreRecord: true),
+                Localized::publicLink('/produk'),
                 Toggle::make('is_published')->label('Tampilkan')->default(true),
                 Toggle::make('is_featured')->label('Unggulan di beranda'),
                 TextInput::make('demo_url')->label('Link demo')->url()->placeholder('https://demo.contoh.com')

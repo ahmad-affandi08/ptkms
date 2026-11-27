@@ -2,13 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\AutoFills;
 use App\Models\Concerns\HasLocalized;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductCategory extends Model
 {
-    use HasLocalized;
+    use AutoFills, HasLocalized;
+
+    public const SLUG_FROM = 'name';
 
     protected $guarded = [];
 

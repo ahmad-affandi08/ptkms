@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\AutoFills;
 use App\Models\Concerns\HasImages;
 use App\Models\Concerns\HasLocalized;
 use Illuminate\Database\Eloquent\Builder;
@@ -10,7 +11,11 @@ use Spatie\MediaLibrary\HasMedia;
 
 class Post extends Model implements HasMedia
 {
-    use HasImages, HasLocalized;
+    use AutoFills, HasImages, HasLocalized;
+
+    public const SLUG_FROM = 'title';
+
+    public const EXCERPT_FROM = 'body';
 
     protected $guarded = [];
 

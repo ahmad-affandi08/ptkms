@@ -8,7 +8,6 @@ use App\Models\ProductCategory;
 use BackedEnum;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
-use Filament\Forms\Components\TextInput;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -33,8 +32,7 @@ class ProductCategoryResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
-            Localized::tabs(fn ($l, $primary) => [Localized::titleWithSlug('name', $l, $primary, 'Nama')]),
-            TextInput::make('slug')->required()->alphaDash()->unique(ignoreRecord: true),
+            Localized::tabs(fn ($l, $primary) => [Localized::title('name', $l, $primary, 'Nama')]),
         ]);
     }
 

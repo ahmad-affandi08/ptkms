@@ -10,10 +10,10 @@ class SeoFields
 {
     public static function section(): Section
     {
-        return Section::make('SEO')->description('Kosongkan untuk memakai judul & ringkasan.')->collapsed()->columnSpanFull()->schema([
+        return Section::make('Tampilan di Google (opsional)')->description('Sudah terisi otomatis dari judul dan ringkasan. Isi hanya jika ingin teks berbeda di hasil pencarian Google.')->collapsed()->columnSpanFull()->schema([
             Localized::tabs(fn ($l) => [
-                TextInput::make("seo.{$l}.title")->label('Judul SEO')->maxLength(70),
-                Textarea::make("seo.{$l}.description")->label('Deskripsi SEO')->rows(2)->maxLength(160),
+                TextInput::make("seo.{$l}.title")->label('Judul di Google')->maxLength(70),
+                Textarea::make("seo.{$l}.description")->label('Deskripsi di Google')->rows(2)->maxLength(160),
             ]),
         ]);
     }
