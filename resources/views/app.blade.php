@@ -5,6 +5,7 @@
         '@type' => 'Organization',
         'name' => $site['company_name'] ?? config('app.name'),
         'url' => config('app.url'),
+        'logo' => asset('images/logo-mark.png'),
         'email' => $site['email'] ?? null,
         'telephone' => $site['phone'] ?? null,
         'address' => isset($site['address']) ? ['@type' => 'PostalAddress', 'streetAddress' => $site['address'], 'addressCountry' => 'ID'] : null,
@@ -19,7 +20,7 @@
         <meta name="theme-color" content="#14212b">
 
         <link rel="icon" href="/favicon.ico" sizes="any">
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+        <link rel="icon" href="/images/icon-192.png" type="image/png" sizes="192x192">
         <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
         <script type="application/ld+json">{!! json_encode($org, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) !!}</script>

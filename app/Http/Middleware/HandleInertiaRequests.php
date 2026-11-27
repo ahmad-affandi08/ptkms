@@ -34,7 +34,7 @@ class HandleInertiaRequests extends Middleware
             'name' => $s['company_name'] ?? config('app.name'),
             'short_name' => $s['short_name'] ?? config('app.name'),
             'url' => rtrim(config('app.url'), '/'),
-            'logo' => $url($s['logo'] ?? null),
+            'logo' => $url($s['logo'] ?? null) ?? asset('images/logo-mark.png'),
             'og_image' => $url($s['og_image'] ?? null),
             'about_short' => Translation::pick($s['about_short'] ?? null),
             'email' => $s['email'] ?? null,

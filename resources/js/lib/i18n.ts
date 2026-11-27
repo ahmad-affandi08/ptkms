@@ -14,7 +14,6 @@ const en = {
     'Lihat katalog': 'Browse catalogue',
     Menu: 'Menu',
     'Tutup menu': 'Close menu',
-    'Ganti ke bahasa Inggris': 'Switch to Indonesian',
     'Chat WhatsApp': 'Chat on WhatsApp',
     'Yang kami kerjakan': 'What we do',
     'Dari pengadaan sampai perawatan rutin, satu tim yang sama menangani alat Anda.':
