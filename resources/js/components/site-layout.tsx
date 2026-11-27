@@ -69,9 +69,11 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
                                             isActive(href) ? 'page' : undefined
                                         }
                                         className={cn(
-                                            'px-3 py-2 text-[0.95rem] font-medium text-ink-soft hover:text-ink',
+                                            // Garis oranye tumbuh dari kiri saat hover, keluar ke kanan saat kursor pergi.
+                                            'relative block px-3 py-2 text-[0.95rem] font-medium text-ink-soft hover:text-ink',
+                                            'after:absolute after:inset-x-3 after:-bottom-0.5 after:h-0.5 after:origin-right after:scale-x-0 after:rounded-full after:bg-signal-bright after:transition-transform after:duration-300 after:ease-out hover:after:origin-left hover:after:scale-x-100',
                                             isActive(href) &&
-                                                'text-ink underline decoration-signal-bright decoration-2 underline-offset-[10px]',
+                                                'text-ink after:scale-x-100',
                                         )}
                                     >
                                         {t(label)}
