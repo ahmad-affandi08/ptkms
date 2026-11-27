@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Faq;
 use App\Models\GalleryItem;
+use App\Models\Product;
 use App\Models\Service;
 use App\Models\Setting;
 use App\Models\User;
@@ -134,6 +135,46 @@ class DatabaseSeeder extends Seeder
                     ->preservingOriginal()
                     ->toMediaCollection('images');
             }
+        }
+
+        // Software KMS, disimpan sebagai draf (tidak tampil) sampai owner melengkapi gambar, link demo, dan memeriksa isinya.
+        // Isi diambil dari dokumentasi proyek kmspacs dan omniscope.
+        $software = [
+            'kms-pacs' => [
+                'name' => 'KMS PACS',
+                'excerpt' => [
+                    'id' => 'Sistem PACS untuk menyimpan, mengelola, dan menampilkan citra radiologi, terhubung dengan SIMRS rumah sakit.',
+                    'en' => 'A PACS for storing, managing and viewing radiology images, connected to the hospital information system.',
+                ],
+                'description' => [
+                    'id' => '<p>KMS PACS menghubungkan pendaftaran pasien di SIMRS dengan alat radiologi dan dokter pembaca.</p><ul><li>Bridging SIMRS lewat REST API, webhook, atau HL7, sehingga data pasien tidak perlu diketik ulang di alat.</li><li>Worklist radiologi real-time dengan filter dokter pengirim, tanggal, dan nama pasien.</li><li>DICOM viewer berbasis web tanpa instalasi: zoom, pan, window level, pengukuran, dan rekonstruksi 3D.</li><li>Citra dan hasil bacaan tersimpan digital, mengurangi kebutuhan cetak film.</li></ul>',
+                    'en' => '<p>KMS PACS connects patient registration in the hospital information system with radiology modalities and reading doctors.</p><ul><li>Hospital system bridging over REST API, webhooks or HL7, so patient data is never re-typed at the modality.</li><li>Real-time radiology worklist, filterable by referring doctor, date and patient name.</li><li>Zero-install web DICOM viewer: zoom, pan, window level, measurements and 3D reconstruction.</li><li>Images and reports are stored digitally, reducing film printing.</li></ul>',
+                ],
+                'specs' => [
+                    ['label' => 'Akses', 'value' => 'Web browser'],
+                    ['label' => 'Integrasi SIMRS', 'value' => 'REST API, webhook, HL7'],
+                    ['label' => 'Standar citra', 'value' => 'DICOM'],
+                ],
+            ],
+            'omniscope' => [
+                'name' => 'Omniscope',
+                'excerpt' => [
+                    'id' => 'Aplikasi rekam medis endoskopi dan laparoskopi: tangkap gambar dan video dari alat, buat laporan PDF, lalu kirim ke WhatsApp pasien.',
+                    'en' => 'Endoscopy and laparoscopy records: capture images and video from the scope, produce a PDF report and send it to the patient on WhatsApp.',
+                ],
+                'description' => [
+                    'id' => '<ul><li>Pengambilan gambar dan perekaman video dari alat endoskopi atau laparoskopi lewat USB video capture.</li><li>Data pasien dan riwayat pemeriksaan tersimpan rapi.</li><li>Laporan pemeriksaan dalam format PDF.</li><li>Laporan dikirim otomatis ke WhatsApp pasien.</li></ul>',
+                    'en' => '<ul><li>Image capture and video recording from endoscopes or laparoscopes via USB video capture.</li><li>Patient records and examination history kept in one place.</li><li>Examination reports as PDF.</li><li>Reports sent automatically to the patient on WhatsApp.</li></ul>',
+                ],
+                'specs' => [
+                    ['label' => 'Sumber video', 'value' => 'USB video capture'],
+                    ['label' => 'Laporan', 'value' => 'PDF'],
+                    ['label' => 'Pengiriman', 'value' => 'WhatsApp'],
+                ],
+            ],
+        ];
+        foreach ($software as $slug => $data) {
+            Product::firstOrCreate(['slug' => $slug], $data + ['type' => 'software', 'is_published' => false]);
         }
     }
 }

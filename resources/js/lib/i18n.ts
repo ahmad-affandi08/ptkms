@@ -30,6 +30,12 @@ const en = {
     'Dokumentasi proyek sedang kami siapkan. Sementara itu, lihat foto pekerjaan kami di galeri.':
         'Project write-ups are on the way. In the meantime, see our work in the gallery.',
     'Artikel terbaru': 'Latest articles',
+    Software: 'Software',
+    'Alat kesehatan': 'Medical equipment',
+    Semua: 'All',
+    'Jenis produk': 'Product type',
+    'Coba demo': 'Try the demo',
+    'Minta demo atau penawaran': 'Request a demo or quote',
     'Katalog sedang dilengkapi': 'Catalogue coming soon',
     'Untuk daftar alat dan harga, minta penawaran atau kunjungi toko online kami.':
         'For equipment lists and prices, request a quote or visit our online stores.',

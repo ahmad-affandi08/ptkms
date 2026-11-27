@@ -1,4 +1,5 @@
 import { Link } from '@inertiajs/react';
+import { ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 import {
     ContactBand,
@@ -23,6 +24,7 @@ export default function ProductShow({
     related: Product[];
 }) {
     const { t, lp } = useT();
+    const software = product.type === 'software';
     const images = product.images ?? [];
     const [active, setActive] = useState(0);
 
@@ -30,6 +32,7 @@ export default function ProductShow({
         [t('Brand'), product.brand],
         [t('Tipe'), product.model],
         [t('Kategori'), product.category?.name],
+        [t('Jenis produk'), software ? t('Software') : null],
         [t('No. izin edar'), product.akl_number],
     ].filter(([, v]) => v) as [string, string][];
 
@@ -59,13 +62,24 @@ export default function ProductShow({
 
             <Container className="grid gap-10 py-8 lg:grid-cols-12 lg:gap-14 lg:py-12">
                 <div className="lg:col-span-7">
-                    <div className="aspect-square bg-plate">
+                    <div
+                        className={cn(
+                            'bg-plate',
+                            software
+                                ? 'aspect-video border border-line'
+                                : 'aspect-square',
+                        )}
+                    >
                         <Img
                             image={images[active]}
                             alt={product.name}
                             eager
                             sizes="(min-width: 1024px) 58vw, 100vw"
-                            className="size-full object-contain p-6 mix-blend-multiply"
+                            className={
+                                software
+                                    ? 'size-full object-cover object-top'
+                                    : 'size-full object-contain p-6 mix-blend-multiply'
+                            }
                         />
                     </div>
                     {images.length > 1 && (
@@ -126,11 +140,29 @@ export default function ProductShow({
                     )}
 
                     <div className="mt-8 flex flex-wrap gap-3">
+                        {product.demo_url && (
+                            <a
+                                href={product.demo_url}
+                                target="_blank"
+                                rel="noopener"
+                                className="inline-flex items-center gap-2 rounded-sm bg-signal px-6 py-3 font-semibold text-white hover:bg-signal-dark"
+                            >
+                                {t('Coba demo')}
+                                <ExternalLink aria-hidden className="size-4" />
+                            </a>
+                        )}
                         <Link
                             href={lp(`/kontak?produk=${product.id}`)}
-                            className="rounded-sm bg-signal px-6 py-3 font-semibold text-white hover:bg-signal-dark"
+                            className={cn(
+                                'rounded-sm px-6 py-3 font-semibold',
+                                product.demo_url
+                                    ? 'border border-ink/25 hover:border-ink'
+                                    : 'bg-signal text-white hover:bg-signal-dark',
+                            )}
                         >
-                            {t('Tanyakan produk ini')}
+                            {software
+                                ? t('Minta demo atau penawaran')
+                                : t('Tanyakan produk ini')}
                         </Link>
                         {product.tokopedia_url && (
                             <a

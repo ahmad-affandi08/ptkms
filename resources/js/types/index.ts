@@ -49,6 +49,7 @@ export type Category = { slug: string; name: string };
 
 export type Product = {
     slug: string;
+    type: 'device' | 'software';
     name: string;
     model: string | null;
     excerpt: string | null;
@@ -62,6 +63,7 @@ export type Product = {
     images?: Image[];
     tokopedia_url?: string | null;
     shopee_url?: string | null;
+    demo_url?: string | null;
 };
 
 export type Project = {

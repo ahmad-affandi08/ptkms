@@ -20,7 +20,12 @@ type Props = {
     seo: SeoData;
     products: Paginated<Product> & { total: number };
     categories: Category[];
-    filters: { kategori: string | null; q: string | null };
+    filters: {
+        kategori: string | null;
+        q: string | null;
+        jenis: 'alat' | 'software' | null;
+    };
+    hasSoftware: boolean;
 };
 
 export default function Products({
@@ -28,6 +33,7 @@ export default function Products({
     products,
     categories,
     filters,
+    hasSoftware,
 }: Props) {
     const { t, lp } = useT();
 
@@ -39,6 +45,7 @@ export default function Products({
         router.get(
             lp('/produk'),
             {
+                ...(filters.jenis && { jenis: filters.jenis }),
                 ...(filters.kategori && { kategori: filters.kategori }),
                 ...(q && { q }),
             },
@@ -48,7 +55,17 @@ export default function Products({
 
     const catHref = (slug: string | null) => {
         const params = new URLSearchParams({
+            ...(filters.jenis && { jenis: filters.jenis }),
             ...(slug && { kategori: slug }),
+            ...(filters.q && { q: filters.q }),
+        });
+
+        return lp('/produk') + (params.size ? `?${params}` : '');
+    };
+
+    const typeHref = (jenis: string | null) => {
+        const params = new URLSearchParams({
+            ...(jenis && { jenis }),
             ...(filters.q && { q: filters.q }),
         });
 
@@ -130,6 +147,39 @@ export default function Products({
                             : 'lg:col-span-12'
                     }
                 >
+                    {(hasSoftware || filters.jenis) && (
+                        <nav
+                            aria-label={t('Jenis produk')}
+                            className="mb-6 inline-flex rounded-sm border border-line bg-white p-1"
+                        >
+                            {(
+                                [
+                                    [null, t('Semua')],
+                                    ['alat', t('Alat kesehatan')],
+                                    ['software', t('Software')],
+                                ] as const
+                            ).map(([jenis, label]) => (
+                                <Link
+                                    key={jenis ?? 'all'}
+                                    href={typeHref(jenis)}
+                                    preserveState
+                                    aria-current={
+                                        filters.jenis === jenis
+                                            ? 'page'
+                                            : undefined
+                                    }
+                                    className={cn(
+                                        'rounded-[2px] px-4 py-2 text-sm font-semibold',
+                                        filters.jenis === jenis
+                                            ? 'bg-signal text-white'
+                                            : 'text-steel hover:text-ink',
+                                    )}
+                                >
+                                    {label}
+                                </Link>
+                            ))}
+                        </nav>
+                    )}
                     <p className="mb-6 text-sm text-steel" aria-live="polite">
                         {products.total} {t('produk')}
                     </p>
@@ -139,7 +189,7 @@ export default function Products({
                                 <ProductCard key={p.slug} product={p} />
                             ))}
                         </div>
-                    ) : !filters.q && !filters.kategori ? (
+                    ) : !filters.q && !filters.kategori && !filters.jenis ? (
                         <ComingSoon
                             icon={Stethoscope}
                             aspect="aspect-square"

@@ -80,10 +80,12 @@ class SiteController extends Controller
     public function products(Request $request): Response
     {
         $category = $request->string('kategori')->toString();
+        $type = ['alat' => 'device', 'software' => 'software'][$request->string('jenis')->toString()] ?? null;
         $search = Str::limit($request->string('q')->trim()->toString(), 100, '');
 
         $products = Product::visible()
             ->with('category', 'brand', 'media')
+            ->when($type, fn ($q) => $q->where('type', $type))
             ->when($category, fn ($q) => $q->whereHas('category', fn ($c) => $c->where('slug', $category)))
             ->when($search, fn ($q) => $q->where(fn ($q) => $q
                 ->where('name', 'like', "%{$search}%")
@@ -96,7 +98,8 @@ class SiteController extends Controller
         return $this->page('products/index', 'products', [
             'products' => $products,
             'categories' => ProductCategory::orderBy('sort')->has('products')->get()->map->toPublic(),
-            'filters' => ['kategori' => $category ?: null, 'q' => $search ?: null],
+            'filters' => ['kategori' => $category ?: null, 'q' => $search ?: null, 'jenis' => $type ? array_search($type, ['alat' => 'device', 'software' => 'software']) : null],
+            'hasSoftware' => Product::visible()->where('type', 'software')->exists(),
         ]);
     }
 

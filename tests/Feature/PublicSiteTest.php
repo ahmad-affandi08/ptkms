@@ -67,6 +67,18 @@ class PublicSiteTest extends TestCase
         $this->get('/produk?q=infusion')->assertInertia(fn (Assert $page) => $page->where('products.total', 1)->where('products.data.0.slug', 'y'));
     }
 
+    public function test_catalogue_separates_software_and_shows_demo_link(): void
+    {
+        Product::create(['slug' => 'pm', 'name' => 'Patient Monitor']);
+        Product::create(['slug' => 'pacs', 'name' => 'KMS PACS', 'type' => 'software', 'demo_url' => 'https://demo.example.com']);
+
+        $this->get('/produk')->assertInertia(fn (Assert $page) => $page->where('products.total', 2)->where('hasSoftware', true));
+        $this->get('/produk?jenis=software')->assertInertia(fn (Assert $page) => $page->where('products.total', 1)->where('products.data.0.slug', 'pacs')->where('filters.jenis', 'software'));
+        $this->get('/produk?jenis=alat')->assertInertia(fn (Assert $page) => $page->where('products.total', 1)->where('products.data.0.slug', 'pm'));
+        $this->get('/produk?jenis=bogus')->assertInertia(fn (Assert $page) => $page->where('products.total', 2)->where('filters.jenis', null));
+        $this->get('/produk/pacs')->assertInertia(fn (Assert $page) => $page->where('product.type', 'software')->where('product.demo_url', 'https://demo.example.com'));
+    }
+
     public function test_old_hostinger_urls_redirect_permanently(): void
     {
         $this->get('/about')->assertStatus(301)->assertRedirect('/tentang');

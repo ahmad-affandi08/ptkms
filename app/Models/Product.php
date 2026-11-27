@@ -18,6 +18,8 @@ class Product extends Model implements HasMedia
     /** @var list<string> */
     protected array $localized = ['excerpt', 'description', 'seo'];
 
+    public const TYPES = ['device' => 'Alat kesehatan', 'software' => 'Software'];
+
     protected $casts = ['specs' => 'array', 'is_featured' => 'boolean'];
 
     /** @return BelongsTo<ProductCategory, $this> */
@@ -37,6 +39,7 @@ class Product extends Model implements HasMedia
     {
         return [
             'slug' => $this->slug,
+            'type' => $this->type,
             'name' => $this->name,
             'model' => $this->model,
             'excerpt' => $this->tr('excerpt'),
@@ -50,6 +53,7 @@ class Product extends Model implements HasMedia
                 'images' => $this->images(),
                 'tokopedia_url' => $this->tokopedia_url,
                 'shopee_url' => $this->shopee_url,
+                'demo_url' => $this->demo_url,
             ] : [],
         ];
     }

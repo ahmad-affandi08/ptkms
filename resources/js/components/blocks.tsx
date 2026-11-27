@@ -118,17 +118,27 @@ export function TextLink({
 }
 
 export function ProductCard({ product }: { product: Product }) {
-    const { lp } = useT();
+    const { t, lp } = useT();
+    const software = product.type === 'software';
 
     return (
         <article className="group relative">
-            <div className="aspect-square overflow-hidden bg-plate">
+            <div className="relative aspect-square overflow-hidden bg-plate">
                 <Img
                     image={product.image}
                     alt={product.name}
                     sizes="(min-width: 1024px) 25vw, 50vw"
-                    className="size-full object-contain p-4 mix-blend-multiply"
+                    className={
+                        software
+                            ? 'size-full object-cover object-top'
+                            : 'size-full object-contain p-4 mix-blend-multiply'
+                    }
                 />
+                {software && (
+                    <span className="absolute top-2 left-2 rounded-sm bg-white px-2 py-1 text-xs font-semibold text-signal ring-1 ring-line">
+                        {t('Software')}
+                    </span>
+                )}
             </div>
             <h3 className="mt-3 font-display text-lg leading-snug font-semibold">
                 <Link
