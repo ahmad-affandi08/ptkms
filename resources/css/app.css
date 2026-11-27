@@ -1,0 +1,111 @@
+@import 'tailwindcss';
+
+@source '../views';
+
+/*
+ * Palet diambil dari logo KMS: oranye (signal) dan hijau (clinic) di atas putih klinis.
+ * signal #C2410C dipakai untuk tombol karena kontrasnya dengan teks putih ≥ 4.5:1.
+ */
+@theme {
+    --font-sans: 'Barlow', ui-sans-serif, system-ui, sans-serif;
+    --font-display:
+        'Barlow Semi Condensed', 'Barlow', ui-sans-serif, system-ui, sans-serif;
+
+    --color-ink: #14212b;
+    --color-ink-soft: #263643;
+    --color-paper: #f7f8f6;
+    --color-plate: #eceeeb;
+    --color-line: #d9dedb;
+    --color-steel: #5b6b76;
+    --color-signal: #c2410c;
+    --color-signal-dark: #9a3412;
+    --color-signal-bright: #ea580c;
+    --color-clinic: #2f7d5b;
+
+    --animate-reveal: reveal 900ms cubic-bezier(0.2, 0.7, 0.1, 1) both;
+
+    @keyframes reveal {
+        from {
+            clip-path: inset(0 0 0 100%);
+        }
+        to {
+            clip-path: inset(0 0 0 0);
+        }
+    }
+}
+
+@layer base {
+    html {
+        background: var(--color-paper);
+        color: var(--color-ink);
+        -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+        font-size: 1.0625rem;
+        line-height: 1.6;
+    }
+
+    h1,
+    h2,
+    h3 {
+        font-family: var(--font-display);
+        text-wrap: balance;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--color-signal-bright);
+        outline-offset: 2px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation: none !important;
+            transition: none !important;
+        }
+    }
+}
+
+@layer components {
+    /* Isi dari RichEditor dashboard. */
+    .prose-kms {
+        max-width: 68ch;
+        > * + * {
+            margin-top: 1em;
+        }
+        h2 {
+            font-size: 1.75rem;
+            line-height: 1.2;
+            font-weight: 600;
+            margin-top: 1.6em;
+        }
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-top: 1.4em;
+        }
+        a {
+            color: var(--color-signal);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        ul {
+            list-style: disc;
+            padding-left: 1.25rem;
+        }
+        ol {
+            list-style: decimal;
+            padding-left: 1.25rem;
+        }
+        img {
+            border-radius: 2px;
+        }
+        blockquote {
+            border-left: 3px solid var(--color-signal-bright);
+            padding-left: 1rem;
+            color: var(--color-steel);
+        }
+    }
+}

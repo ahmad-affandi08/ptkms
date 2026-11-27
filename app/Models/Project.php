@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Models;
+
+use App\Models\Concerns\HasImages;
+use App\Models\Concerns\HasLocalized;
+use App\Models\Concerns\Listable;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+
+class Project extends Model implements HasMedia
+{
+    use HasImages, HasLocalized, Listable;
+
+    protected $guarded = [];
+
+    /** @var list<string> */
+    protected array $localized = ['title', 'excerpt', 'body'];
+
+    /** @return array<string, mixed> */
+    public function toPublic(bool $full = false): array
+    {
+        return [
+            'slug' => $this->slug,
+            'title' => $this->tr('title'),
+            'client' => $this->client,
+            'location' => $this->location,
+            'year' => $this->year,
+            'excerpt' => $this->tr('excerpt'),
+            'image' => $this->cover(),
+            ...$full ? ['body' => $this->tr('body'), 'images' => $this->images()] : [],
+        ];
+    }
+}
