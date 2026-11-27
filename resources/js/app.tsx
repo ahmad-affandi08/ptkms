@@ -8,4 +8,11 @@ void createInertiaApp({
     layout: () => SiteLayout,
     strictMode: true,
     progress: { color: '#e06a1a' },
+    defaults: {
+        // Animasi pindah halaman untuk kunjungan GET; peramban tanpa View Transitions langsung berganti.
+        visitOptions: (_href, options) => ({
+            ...options,
+            viewTransition: options.viewTransition || options.method === 'get',
+        }),
+    },
 });

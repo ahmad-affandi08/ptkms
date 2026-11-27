@@ -1,4 +1,5 @@
-import { Container, Empty, PageHeader } from '@/components/blocks';
+import { Images } from 'lucide-react';
+import { ComingSoon, Container, PageHeader } from '@/components/blocks';
 import Img from '@/components/img';
 import Seo from '@/components/seo';
 import { useT } from '@/lib/i18n';
@@ -18,7 +19,16 @@ export default function Gallery({
             <Seo seo={seo} fallbackTitle={t('Galeri')} />
             <PageHeader title={t('Galeri')} />
             <Container className="py-12 lg:py-16">
-                {items.length === 0 && <Empty>{t('Belum ada foto.')}</Empty>}
+                {items.length === 0 && (
+                    <ComingSoon
+                        icon={Images}
+                        aspect="aspect-[3/4]"
+                        title={t('Foto segera hadir')}
+                        text={t(
+                            'Dokumentasi pekerjaan tim kami akan muncul di sini.',
+                        )}
+                    />
+                )}
                 <ul className="columns-1 gap-4 sm:columns-2 lg:columns-3">
                     {items.map((item, i) => (
                         <li key={i} className="mb-4 break-inside-avoid">

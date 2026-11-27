@@ -28,6 +28,14 @@
     --color-clinic-dark: #2c6527;
 
     --animate-reveal: reveal 900ms cubic-bezier(0.2, 0.7, 0.1, 1) both;
+    --animate-rise: rise 700ms cubic-bezier(0.2, 0.7, 0.1, 1) both;
+
+    @keyframes rise {
+        from {
+            opacity: 0;
+            translate: 0 1.25rem;
+        }
+    }
 
     @keyframes reveal {
         from {
@@ -58,6 +66,16 @@
         text-wrap: balance;
     }
 
+    a,
+    button,
+    summary {
+        transition-property:
+            color, background-color, border-color, text-decoration-color,
+            box-shadow, filter;
+        transition-duration: 180ms;
+        transition-timing-function: ease-out;
+    }
+
     :focus-visible {
         outline: 2px solid var(--color-signal-bright);
         outline-offset: 2px;
@@ -70,10 +88,60 @@
             animation: none !important;
             transition: none !important;
         }
+
+        ::view-transition-group(*),
+        ::view-transition-old(*),
+        ::view-transition-new(*) {
+            animation: none !important;
+        }
+    }
+
+    /* Pindah halaman (View Transitions dari Inertia): header diam, isi memudar lalu naik sedikit. */
+    ::view-transition-old(root) {
+        animation: 140ms ease-in both vt-out;
+    }
+    ::view-transition-new(root) {
+        animation: 380ms cubic-bezier(0.2, 0.7, 0.1, 1) both vt-in;
+    }
+    @keyframes vt-out {
+        to {
+            opacity: 0;
+        }
+    }
+    @keyframes vt-in {
+        from {
+            opacity: 0;
+            translate: 0 0.75rem;
+        }
     }
 }
 
 @layer components {
+    /*
+     * Muncul saat di-scroll, murni CSS (scroll-driven animation): tanpa JS, aman untuk SSR,
+     * peramban tanpa dukungan tetap menampilkan konten apa adanya. Rentang dalam rem supaya
+     * elemen tinggi pun sudah utuh sebelum dibaca. Elemen di dalam kartu tidak ikut, agar tidak dobel.
+     */
+    @supports (animation-timeline: view()) {
+        main
+            section
+            :is(h2, h2 + p, li, article, figure, blockquote):not(
+                :where(li, article, figure, blockquote) *
+            ) {
+            animation: rise linear both;
+            animation-timeline: view();
+            animation-range: entry 0 entry 10rem;
+        }
+    }
+
+    /* Foto kartu sedikit membesar saat kartunya di-hover. */
+    .group .overflow-hidden > img {
+        transition: scale 500ms cubic-bezier(0.2, 0.7, 0.1, 1);
+    }
+    .group:hover .overflow-hidden > img {
+        scale: 1.04;
+    }
+
     /* Isi dari RichEditor dashboard. */
     .prose-kms {
         max-width: 68ch;

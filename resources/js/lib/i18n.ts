@@ -30,6 +30,18 @@ const en = {
     'Dokumentasi proyek sedang kami siapkan. Sementara itu, lihat foto pekerjaan kami di galeri.':
         'Project write-ups are on the way. In the meantime, see our work in the gallery.',
     'Artikel terbaru': 'Latest articles',
+    'Katalog sedang dilengkapi': 'Catalogue coming soon',
+    'Untuk daftar alat dan harga, minta penawaran atau kunjungi toko online kami.':
+        'For equipment lists and prices, request a quote or visit our online stores.',
+    'Dokumentasi proyek segera hadir': 'Project write-ups coming soon',
+    'Sementara itu, lihat foto pekerjaan tim kami di galeri.':
+        'In the meantime, see our team at work in the gallery.',
+    'Artikel pertama segera terbit': 'First article coming soon',
+    'Kabar dan tulisan dari tim KMS akan muncul di sini.':
+        'News and writing from the KMS team will appear here.',
+    'Foto segera hadir': 'Photos coming soon',
+    'Dokumentasi pekerjaan tim kami akan muncul di sini.':
+        'Photos of our team at work will appear here.',
     'Semua artikel': 'All articles',
     'Penyetelan lampu operasi': 'Adjusting an operating light',
     'Dari pengadaan sampai perawatan rutin, satu tim yang sama menangani alat Anda.':

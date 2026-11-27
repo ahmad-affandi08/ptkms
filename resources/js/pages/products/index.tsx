@@ -1,6 +1,10 @@
 import { Link, router } from '@inertiajs/react';
 import type { FormEvent } from 'react';
+import { Stethoscope } from 'lucide-react';
 import {
+    buttonPrimary,
+    ComingSoon,
+    ShopLinks,
     Container,
     Empty,
     PageHeader,
@@ -135,6 +139,23 @@ export default function Products({
                                 <ProductCard key={p.slug} product={p} />
                             ))}
                         </div>
+                    ) : !filters.q && !filters.kategori ? (
+                        <ComingSoon
+                            icon={Stethoscope}
+                            aspect="aspect-square"
+                            title={t('Katalog sedang dilengkapi')}
+                            text={t(
+                                'Untuk daftar alat dan harga, minta penawaran atau kunjungi toko online kami.',
+                            )}
+                        >
+                            <Link
+                                href={lp('/kontak?perlu=quotation')}
+                                className={buttonPrimary}
+                            >
+                                {t('Minta penawaran')}
+                            </Link>
+                            <ShopLinks />
+                        </ComingSoon>
                     ) : (
                         <Empty>
                             {t(

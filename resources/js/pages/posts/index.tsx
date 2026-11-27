@@ -1,5 +1,12 @@
 import { Link } from '@inertiajs/react';
-import { Container, Empty, PageHeader, Pagination } from '@/components/blocks';
+import { Newspaper } from 'lucide-react';
+import {
+    buttonOutline,
+    ComingSoon,
+    Container,
+    PageHeader,
+    Pagination,
+} from '@/components/blocks';
 import Img from '@/components/img';
 import Seo from '@/components/seo';
 import { useT } from '@/lib/i18n';
@@ -21,7 +28,18 @@ export default function Posts({
             <PageHeader title={t('Artikel')} />
             <Container className="py-12 lg:py-16">
                 {posts.data.length === 0 && (
-                    <Empty>{t('Belum ada artikel.')}</Empty>
+                    <ComingSoon
+                        icon={Newspaper}
+                        aspect="aspect-[3/2]"
+                        title={t('Artikel pertama segera terbit')}
+                        text={t(
+                            'Kabar dan tulisan dari tim KMS akan muncul di sini.',
+                        )}
+                    >
+                        <Link href={lp('/kontak')} className={buttonOutline}>
+                            {t('Hubungi kami')}
+                        </Link>
+                    </ComingSoon>
                 )}
                 <div className="grid gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
                     {posts.data.map((p) => (

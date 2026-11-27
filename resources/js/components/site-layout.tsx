@@ -38,7 +38,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
                 {t('Langsung ke konten')}
             </a>
 
-            <header className="sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur supports-[backdrop-filter]:bg-paper/85">
+            <header className="sticky top-0 z-40 border-b border-line bg-paper/95 backdrop-blur [view-transition-name:site-header] supports-[backdrop-filter]:bg-paper/85">
                 <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6 lg:h-20">
                     <Link
                         href={lp('/')}

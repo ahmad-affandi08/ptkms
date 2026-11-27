@@ -1,5 +1,12 @@
 import { Link } from '@inertiajs/react';
-import { ContactBand, Container, Empty, PageHeader } from '@/components/blocks';
+import { Hospital } from 'lucide-react';
+import {
+    buttonOutline,
+    ComingSoon,
+    ContactBand,
+    Container,
+    PageHeader,
+} from '@/components/blocks';
 import Img from '@/components/img';
 import Seo from '@/components/seo';
 import { useT } from '@/lib/i18n';
@@ -20,7 +27,17 @@ export default function Projects({
             <PageHeader title={t('Proyek')} />
             <Container className="py-12 lg:py-20">
                 {projects.length === 0 && (
-                    <Empty>{t('Belum ada proyek yang dipublikasikan.')}</Empty>
+                    <ComingSoon
+                        icon={Hospital}
+                        title={t('Dokumentasi proyek segera hadir')}
+                        text={t(
+                            'Sementara itu, lihat foto pekerjaan tim kami di galeri.',
+                        )}
+                    >
+                        <Link href={lp('/galeri')} className={buttonOutline}>
+                            {t('Lihat galeri')}
+                        </Link>
+                    </ComingSoon>
                 )}
                 <div className="space-y-16 lg:space-y-24">
                     {projects.map((p, i) => (

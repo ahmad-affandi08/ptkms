@@ -1,4 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
+import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import Img from '@/components/img';
 import { WhatsAppIcon } from '@/components/site-layout';
@@ -62,11 +63,11 @@ export function PageHeader({
                             'lg:flex lg:min-h-[28rem] lg:w-[56%] lg:flex-col lg:justify-end',
                     )}
                 >
-                    <h1 className="max-w-4xl text-4xl leading-[1.05] font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+                    <h1 className="max-w-4xl animate-rise text-4xl leading-[1.05] font-semibold tracking-tight sm:text-5xl lg:text-6xl">
                         {title}
                     </h1>
                     {intro && (
-                        <p className="mt-4 max-w-2xl text-lg text-steel">
+                        <p className="mt-4 max-w-2xl animate-rise text-lg text-steel [animation-delay:100ms]">
                             {intro}
                         </p>
                     )}
@@ -296,6 +297,101 @@ export function ContactBand() {
         </section>
     );
 }
+
+/**
+ * Placeholder saat daftar masih kosong: kartu bayangan (abu-abu, bergaris tipis) seperti isi yang akan datang,
+ * dengan panel pesan di tengah. Tidak menampilkan konten karangan.
+ */
+export function ComingSoon({
+    icon: Icon,
+    title,
+    text,
+    cards = 3,
+    aspect = 'aspect-[4/3]',
+    columns = 'sm:grid-cols-3',
+    children,
+}: {
+    icon: LucideIcon;
+    title: string;
+    text: string;
+    cards?: number;
+    aspect?: string;
+    columns?: string;
+    children?: ReactNode;
+}) {
+    return (
+        <div className="relative">
+            <ul
+                aria-hidden
+                className={cn('hidden gap-x-6 gap-y-10 sm:grid', columns)}
+            >
+                {Array.from({ length: cards }, (_, i) => (
+                    <li key={i}>
+                        <div
+                            className={cn(
+                                aspect,
+                                'grid place-items-center border border-line bg-plate bg-[repeating-linear-gradient(135deg,transparent_0_12px,rgb(0_0_0/0.03)_12px_13px)]',
+                            )}
+                        >
+                            <Icon
+                                strokeWidth={1.25}
+                                className="size-12 text-ink/15"
+                            />
+                        </div>
+                        <div className="mt-4 h-3 w-1/3 rounded-full bg-line" />
+                        <div className="mt-3 h-4 w-4/5 rounded-full bg-line/80" />
+                        <div className="mt-2 h-4 w-3/5 rounded-full bg-line/60" />
+                    </li>
+                ))}
+            </ul>
+            <div className="grid place-items-center sm:absolute sm:inset-0 sm:p-6">
+                <div className="w-full max-w-lg border border-line bg-white px-6 py-8 text-center shadow-xl shadow-ink/5 sm:px-8">
+                    <span className="mx-auto grid size-12 place-items-center rounded-full bg-flame/15 text-signal">
+                        <Icon aria-hidden className="size-6" />
+                    </span>
+                    <p className="mt-4 font-display text-xl font-semibold">
+                        {title}
+                    </p>
+                    <p className="mt-2 text-steel">{text}</p>
+                    {children && (
+                        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+                            {children}
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+/** Logo toko online (Tokopedia/Shopee) dari Pengaturan Situs. */
+export function ShopLinks() {
+    const { site } = usePage().props;
+
+    return (['tokopedia', 'shopee'] as const)
+        .filter((k) => site.social[k])
+        .map((k) => (
+            <a
+                key={k}
+                href={site.social[k]}
+                target="_blank"
+                rel="noopener"
+                className="flex h-12 items-center rounded-sm border border-line bg-white px-4 hover:border-ink/40"
+            >
+                <img
+                    src={`/images/brands/${k}.svg`}
+                    alt={k === 'shopee' ? 'Shopee' : 'Tokopedia'}
+                    loading="lazy"
+                    className={k === 'shopee' ? 'h-6' : 'h-[18px]'}
+                />
+            </a>
+        ));
+}
+
+export const buttonPrimary =
+    'rounded-sm bg-signal px-5 py-3 font-semibold text-white hover:bg-signal-dark';
+export const buttonOutline =
+    'rounded-sm border border-ink/25 bg-white px-5 py-3 font-semibold hover:border-ink';
 
 export function Empty({ children }: { children: ReactNode }) {
     return (

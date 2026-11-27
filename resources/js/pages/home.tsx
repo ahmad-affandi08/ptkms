@@ -1,11 +1,15 @@
 import { Link, usePage } from '@inertiajs/react';
+import { Hospital, Newspaper, Stethoscope } from 'lucide-react';
 import {
+    buttonOutline,
+    buttonPrimary,
+    ComingSoon,
     ContactBand,
     Container,
-    Empty,
     LocationSection,
     ProductCard,
     SectionHeading,
+    ShopLinks,
     TextLink,
 } from '@/components/blocks';
 import Img from '@/components/img';
@@ -59,9 +63,6 @@ export default function Home({
 }: Props) {
     const { site } = usePage().props;
     const { t, lp, locale } = useT();
-    const shops = (['tokopedia', 'shopee'] as const).filter(
-        (k) => site.social[k],
-    );
 
     return (
         <>
@@ -96,15 +97,15 @@ export default function Home({
                                 : 'py-12 lg:py-20'
                         }
                     >
-                        <h1 className="text-[2.6rem] leading-[1] font-semibold tracking-tight sm:text-6xl lg:text-[5.25rem]">
+                        <h1 className="animate-rise text-[2.6rem] leading-[1] font-semibold tracking-tight sm:text-6xl lg:text-[5.25rem]">
                             {hero.title ?? site.name}
                         </h1>
                         {hero.subtitle && (
-                            <p className="mt-6 max-w-xl text-lg text-steel sm:text-xl">
+                            <p className="mt-6 max-w-xl animate-rise text-lg text-steel [animation-delay:100ms] sm:text-xl">
                                 {hero.subtitle}
                             </p>
                         )}
-                        <div className="mt-8 flex flex-wrap gap-3">
+                        <div className="mt-8 flex animate-rise flex-wrap gap-3 [animation-delay:200ms]">
                             <Link
                                 href={lp('/kontak?perlu=quotation')}
                                 className="rounded-sm bg-signal px-6 py-3 font-semibold text-white hover:bg-signal-dark"
@@ -118,7 +119,10 @@ export default function Home({
                                 {t('Lihat katalog')}
                             </Link>
                         </div>
-                        <SpecPlate stats={stats} className="mt-12 lg:mt-16" />
+                        <SpecPlate
+                            stats={stats}
+                            className="mt-12 animate-rise [animation-delay:300ms] lg:mt-16"
+                        />
                     </div>
                 </Container>
             </section>
@@ -248,45 +252,24 @@ export default function Home({
                             ))}
                         </div>
                     ) : (
-                        <div className="flex flex-col gap-6 border border-dashed border-line px-6 py-10 lg:flex-row lg:items-center lg:justify-between">
-                            <p className="max-w-xl text-steel">
-                                {t(
-                                    'Katalog online sedang kami lengkapi. Untuk daftar alat dan harga, minta penawaran atau kunjungi toko online kami.',
-                                )}
-                            </p>
-                            <div className="flex flex-wrap items-center gap-3">
-                                <Link
-                                    href={lp('/kontak?perlu=quotation')}
-                                    className="rounded-sm bg-signal px-5 py-3 font-semibold text-white hover:bg-signal-dark"
-                                >
-                                    {t('Minta penawaran')}
-                                </Link>
-                                {shops.map((k) => (
-                                    <a
-                                        key={k}
-                                        href={site.social[k]}
-                                        target="_blank"
-                                        rel="noopener"
-                                        className="flex h-12 items-center rounded-sm border border-line px-4 hover:border-ink/40"
-                                    >
-                                        <img
-                                            src={`/images/brands/${k}.svg`}
-                                            alt={
-                                                k === 'shopee'
-                                                    ? 'Shopee'
-                                                    : 'Tokopedia'
-                                            }
-                                            loading="lazy"
-                                            className={
-                                                k === 'shopee'
-                                                    ? 'h-6'
-                                                    : 'h-[18px]'
-                                            }
-                                        />
-                                    </a>
-                                ))}
-                            </div>
-                        </div>
+                        <ComingSoon
+                            icon={Stethoscope}
+                            cards={4}
+                            aspect="aspect-square"
+                            columns="sm:grid-cols-4"
+                            title={t('Katalog sedang dilengkapi')}
+                            text={t(
+                                'Untuk daftar alat dan harga, minta penawaran atau kunjungi toko online kami.',
+                            )}
+                        >
+                            <Link
+                                href={lp('/kontak?perlu=quotation')}
+                                className={buttonPrimary}
+                            >
+                                {t('Minta penawaran')}
+                            </Link>
+                            <ShopLinks />
+                        </ComingSoon>
                     )}
                 </Container>
             </section>
@@ -335,17 +318,20 @@ export default function Home({
                             ))}
                         </div>
                     ) : (
-                        <Empty>
-                            {t(
-                                'Dokumentasi proyek sedang kami siapkan. Sementara itu, lihat foto pekerjaan kami di galeri.',
-                            )}{' '}
+                        <ComingSoon
+                            icon={Hospital}
+                            title={t('Dokumentasi proyek segera hadir')}
+                            text={t(
+                                'Sementara itu, lihat foto pekerjaan tim kami di galeri.',
+                            )}
+                        >
                             <Link
                                 href={lp('/galeri')}
-                                className="font-semibold text-signal underline underline-offset-4"
+                                className={buttonOutline}
                             >
                                 {t('Lihat galeri')}
                             </Link>
-                        </Empty>
+                        </ComingSoon>
                     )}
                 </Container>
             </section>
@@ -418,7 +404,21 @@ export default function Home({
                             ))}
                         </div>
                     ) : (
-                        <Empty>{t('Belum ada artikel.')}</Empty>
+                        <ComingSoon
+                            icon={Newspaper}
+                            aspect="aspect-[3/2]"
+                            title={t('Artikel pertama segera terbit')}
+                            text={t(
+                                'Kabar dan tulisan dari tim KMS akan muncul di sini.',
+                            )}
+                        >
+                            <Link
+                                href={lp('/kontak')}
+                                className={buttonOutline}
+                            >
+                                {t('Hubungi kami')}
+                            </Link>
+                        </ComingSoon>
                     )}
                 </Container>
             </section>
