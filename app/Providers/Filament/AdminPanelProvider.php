@@ -29,7 +29,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->brandName('KMS Admin')
             ->brandLogo(asset('images/logo-medical.png'))
-            ->darkModeBrandLogo(asset('images/logo-mark.png'))
+            ->darkMode(false)
             ->brandLogoHeight('2.25rem')
             ->favicon(asset('favicon.ico'))
             ->colors(['primary' => Color::hex('#b83336')])
