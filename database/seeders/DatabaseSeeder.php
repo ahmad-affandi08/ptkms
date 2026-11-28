@@ -35,12 +35,12 @@ class DatabaseSeeder extends Seeder
                 'company_name' => 'PT Kanda Medical Solutions Indonesia',
                 'short_name' => 'PT KMS Indonesia',
                 'hero_title' => [
-                    'id' => 'Alat kesehatan yang siap pakai, setiap hari.',
-                    'en' => 'Medical equipment that is ready, every day.',
+                    'id' => 'Solusi Medis Inovatif untuk Anda',
+                    'en' => 'Innovative Medical Solutions for You',
                 ],
                 'hero_subtitle' => [
-                    'id' => 'Pengadaan, servis, dan pemeliharaan alat elektromedis untuk rumah sakit dan klinik di Indonesia sejak lebih dari 18 tahun.',
-                    'en' => 'Supply, servicing and maintenance of electromedical equipment for hospitals and clinics across Indonesia for over 18 years.',
+                    'id' => 'Keahlian di bidang alat kesehatan dan layanan pemeliharaan selama lebih dari 18 tahun.',
+                    'en' => 'Expertise in medical equipment and maintenance services for over 18 years.',
                 ],
                 'about_short' => [
                     'id' => 'PT KMS Indonesia memasok dan merawat alat kesehatan untuk fasilitas layanan kesehatan, dengan tim teknisi elektromedis sendiri.',
@@ -176,5 +176,7 @@ class DatabaseSeeder extends Seeder
         foreach ($software as $slug => $data) {
             Product::firstOrCreate(['slug' => $slug], $data + ['type' => 'software', 'is_published' => false]);
         }
+
+        $this->call(PostSeeder::class);
     }
 }

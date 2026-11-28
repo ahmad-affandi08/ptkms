@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Hospital, Newspaper, Stethoscope } from 'lucide-react';
+import { Clock, Mail, Phone } from 'lucide-react';
 import {
     buttonOutline,
     buttonPrimary,
@@ -75,7 +75,7 @@ export default function Home({
                             src={hero.image}
                             alt={hero.caption ?? ''}
                             fetchPriority="high"
-                            className="aspect-[4/3] w-full animate-reveal object-cover object-[50%_40%] sm:aspect-[16/9] lg:aspect-auto lg:h-full"
+                            className="aspect-[4/3] w-full object-cover object-[50%_40%] sm:aspect-[16/9] lg:aspect-auto lg:h-full"
                         />
                         {hero.caption && (
                             <figcaption
@@ -97,15 +97,15 @@ export default function Home({
                                 : 'py-12 lg:py-20'
                         }
                     >
-                        <h1 className="animate-rise text-[2.6rem] leading-[1] font-semibold tracking-tight sm:text-6xl lg:text-[5.25rem]">
+                        <h1 className="text-[2.6rem] leading-[1] font-semibold tracking-tight sm:text-6xl lg:text-[5.25rem]">
                             {hero.title ?? site.name}
                         </h1>
                         {hero.subtitle && (
-                            <p className="mt-6 max-w-xl animate-rise text-lg text-steel [animation-delay:100ms] sm:text-xl">
+                            <p className="mt-6 max-w-xl text-lg text-steel sm:text-xl">
                                 {hero.subtitle}
                             </p>
                         )}
-                        <div className="mt-8 flex animate-rise flex-wrap gap-3 [animation-delay:200ms]">
+                        <div className="mt-8 flex flex-wrap gap-3">
                             <Link
                                 href={lp('/kontak?perlu=quotation')}
                                 className="rounded-sm bg-signal px-6 py-3 font-semibold text-white hover:bg-signal-dark"
@@ -119,10 +119,7 @@ export default function Home({
                                 {t('Lihat katalog')}
                             </Link>
                         </div>
-                        <SpecPlate
-                            stats={stats}
-                            className="mt-12 animate-rise [animation-delay:300ms] lg:mt-16"
-                        />
+                        <SpecPlate stats={stats} className="mt-12 lg:mt-16" />
                     </div>
                 </Container>
             </section>
@@ -189,14 +186,14 @@ export default function Home({
             )}
 
             {field.length > 0 && (
-                <section className="bg-flame py-16 text-ink [--color-signal-bright:var(--color-ink)] lg:py-24">
+                <section className="bg-flame py-16 text-white [--color-signal-bright:var(--color-white)] lg:py-24">
                     <Container>
                         <div className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
                             <div className="max-w-xl">
                                 <h2 className="text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">
                                     {t('Di lapangan')}
                                 </h2>
-                                <p className="mt-3 text-ink/85">
+                                <p className="mt-3 text-white">
                                     {t(
                                         'Dokumentasi pekerjaan tim kami di rumah sakit.',
                                     )}
@@ -220,7 +217,7 @@ export default function Home({
                                             className="aspect-[3/4] w-full bg-black/10"
                                         />
                                         {item.caption && (
-                                            <figcaption className="mt-3 text-sm text-ink/85">
+                                            <figcaption className="mt-3 text-sm text-white">
                                                 {item.caption}
                                             </figcaption>
                                         )}
@@ -253,7 +250,7 @@ export default function Home({
                         </div>
                     ) : (
                         <ComingSoon
-                            icon={Stethoscope}
+                            art="monitor"
                             cards={4}
                             aspect="aspect-square"
                             columns="sm:grid-cols-4"
@@ -319,7 +316,7 @@ export default function Home({
                         </div>
                     ) : (
                         <ComingSoon
-                            icon={Hospital}
+                            art="hospital"
                             title={t('Dokumentasi proyek segera hadir')}
                             text={t(
                                 'Sementara itu, lihat foto pekerjaan tim kami di galeri.',
@@ -405,7 +402,7 @@ export default function Home({
                         </div>
                     ) : (
                         <ComingSoon
-                            icon={Newspaper}
+                            art="article"
                             aspect="aspect-[3/2]"
                             title={t('Artikel pertama segera terbit')}
                             text={t(
@@ -445,64 +442,84 @@ function SpecPlate({
     className?: string;
 }) {
     const { site } = usePage().props;
-    const { t } = useT();
 
-    const cells = [
-        ...stats.map((s) => ({ label: s.label, value: s.value })),
-        site.office_hours && {
-            label: t('Jam operasional'),
-            value: site.office_hours,
-        },
+    const contacts = [
+        site.office_hours && { icon: Clock, value: site.office_hours },
         site.phone && {
-            label: t('Telepon'),
+            icon: Phone,
             value: site.phone,
             href: `tel:${site.phone.replace(/[^\d+]/g, '')}`,
         },
         site.email && {
-            label: 'Email',
+            icon: Mail,
             value: site.email,
             href: `mailto:${site.email}`,
         },
-    ].filter(Boolean) as { label: string; value: string; href?: string }[];
+    ].filter(Boolean) as {
+        icon: typeof Clock;
+        value: string;
+        href?: string;
+    }[];
 
-    if (cells.length === 0) {
+    if (stats.length === 0 && contacts.length === 0) {
         return null;
     }
 
+    // Angka pengalaman besar sebagai penegas; kontak jadi daftar ringkas berikon di sebelahnya.
     return (
-        <dl
+        <div
             className={cn(
-                'relative grid grid-cols-1 gap-px border-2 border-ink bg-line sm:grid-cols-2',
+                'flex flex-col gap-6 border-t border-line pt-8 sm:flex-row sm:items-center sm:gap-10',
                 className,
             )}
         >
-            {[
-                'top-2 left-2',
-                'top-2 right-2',
-                'bottom-2 left-2',
-                'right-2 bottom-2',
-            ].map((pos) => (
-                <span
-                    key={pos}
-                    aria-hidden
-                    className={`absolute z-10 ${pos} size-1.5 rounded-full bg-ink/40`}
-                />
-            ))}
-            {cells.map((c) => (
-                <div key={c.label} className="bg-white px-6 py-5">
-                    <dt className="text-sm text-steel">{c.label}</dt>
-                    <dd className="mt-1 font-display text-xl font-semibold break-words sm:text-2xl">
-                        {c.href ? (
-                            <a href={c.href} className="hover:text-signal">
-                                {c.value}
-                            </a>
-                        ) : (
-                            c.value
-                        )}
-                    </dd>
+            {stats.map((s) => (
+                <div key={s.label} className="flex items-center gap-4">
+                    {/* data-count: dihitung naik oleh lib/motion.ts */}
+                    <p
+                        data-count
+                        className="font-display text-6xl leading-none font-semibold tracking-tight"
+                    >
+                        {s.value}
+                    </p>
+                    <p className="max-w-[7rem] text-sm leading-snug text-steel">
+                        {s.label}
+                    </p>
                 </div>
             ))}
-        </dl>
+            {contacts.length > 0 && (
+                <ul className="space-y-2 text-[0.95rem] sm:border-l sm:border-line sm:pl-10">
+                    {contacts.map(({ icon: Icon, value, href }) => {
+                        const body = (
+                            <>
+                                <Icon
+                                    aria-hidden
+                                    className="size-4 shrink-0 text-signal"
+                                />
+                                {value}
+                            </>
+                        );
+
+                        return (
+                            <li key={value}>
+                                {href ? (
+                                    <a
+                                        href={href}
+                                        className="flex items-center gap-3 hover:text-signal"
+                                    >
+                                        {body}
+                                    </a>
+                                ) : (
+                                    <span className="flex items-center gap-3">
+                                        {body}
+                                    </span>
+                                )}
+                            </li>
+                        );
+                    })}
+                </ul>
+            )}
+        </div>
     );
 }
 

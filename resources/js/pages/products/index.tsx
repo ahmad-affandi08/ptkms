@@ -1,6 +1,5 @@
 import { Link, router } from '@inertiajs/react';
 import type { FormEvent } from 'react';
-import { Stethoscope } from 'lucide-react';
 import {
     buttonPrimary,
     ComingSoon,
@@ -191,7 +190,7 @@ export default function Products({
                         </div>
                     ) : !filters.q && !filters.kategori && !filters.jenis ? (
                         <ComingSoon
-                            icon={Stethoscope}
+                            art="monitor"
                             aspect="aspect-square"
                             title={t('Katalog sedang dilengkapi')}
                             text={t(

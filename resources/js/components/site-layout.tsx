@@ -1,6 +1,6 @@
 import { Link, usePage } from '@inertiajs/react';
-import { Check, ChevronDown, Menu, X } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { Check, ChevronDown } from 'lucide-react';
+import type { CSSProperties, ReactNode } from 'react';
 import { useEffect, useId, useRef, useState } from 'react';
 import { SOCIAL_ICONS, SocialIcon } from '@/components/brand-icons';
 import { useT } from '@/lib/i18n';
@@ -25,6 +25,24 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
     const path = page.url.split('?')[0];
 
     useEffect(() => setOpen(false), [path]);
+    // Halaman di belakang menu terbuka tidak ikut tergulir.
+    useEffect(() => {
+        document.documentElement.style.overflow = open ? 'hidden' : '';
+    }, [open]);
+    useEffect(() => {
+        let stop: (() => void) | undefined;
+        let cancelled = false;
+        void import('@/lib/motion').then(({ animatePage }) => {
+            const main = document.getElementById('konten');
+            if (!cancelled && main) {
+                stop = animatePage(main);
+            }
+        });
+        return () => {
+            cancelled = true;
+            stop?.();
+        };
+    }, [path]);
 
     const isActive = (href: string) =>
         path === lp(href) || path.startsWith(lp(href) + '/');
@@ -91,49 +109,96 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
                         >
                             {t('Minta penawaran')}
                         </Link>
+                        {/* Tiga garis yang menyatu jadi X saat menu terbuka. */}
                         <button
                             type="button"
-                            className="grid size-10 place-items-center lg:hidden"
+                            className="group relative size-10 lg:hidden"
                             aria-expanded={open}
                             aria-controls="menu-mobile"
                             aria-label={open ? t('Tutup menu') : t('Menu')}
                             onClick={() => setOpen((v) => !v)}
                         >
-                            {open ? (
-                                <X className="size-6" />
-                            ) : (
-                                <Menu className="size-6" />
-                            )}
+                            {[
+                                '-translate-y-[7px] group-aria-expanded:translate-y-0 group-aria-expanded:rotate-45',
+                                'group-aria-expanded:scale-x-0 group-aria-expanded:opacity-0',
+                                'translate-y-[7px] group-aria-expanded:translate-y-0 group-aria-expanded:-rotate-45',
+                            ].map((c) => (
+                                <span
+                                    key={c}
+                                    aria-hidden
+                                    className={cn(
+                                        'absolute inset-x-2 top-1/2 -mt-px h-0.5 rounded-full bg-ink transition-[translate,rotate,scale,opacity] duration-400 ease-[cubic-bezier(0.7,0,0.2,1)]',
+                                        c,
+                                    )}
+                                />
+                            ))}
                         </button>
                     </div>
                 </div>
 
+                {/*
+                 * Menu mobile layar penuh: terbuka seperti tirai dari atas, item naik bergantian dari balik
+                 * mask dan garisnya tergambar dari kiri (--d = jeda per item, nol saat menutup).
+                 * data-lenis-prevent: gulir di dalam menu tidak menggulir halaman di belakangnya.
+                 */}
                 <nav
                     id="menu-mobile"
                     aria-label="Mobile"
-                    hidden={!open}
-                    className="border-t border-line lg:hidden"
+                    inert={!open}
+                    data-lenis-prevent
+                    className={cn(
+                        'absolute inset-x-0 top-full h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line bg-paper transition-[clip-path,visibility] duration-600 ease-[cubic-bezier(0.7,0,0.2,1)] [view-transition-name:mobile-menu] lg:hidden',
+                        open
+                            ? '[clip-path:inset(0_0_0_0)]'
+                            : 'invisible [clip-path:inset(0_0_100%_0)]',
+                    )}
                 >
-                    <ul className="mx-auto max-w-7xl px-4 py-2 sm:px-6">
-                        {NAV.map(([href, label]) => (
-                            <li key={href}>
+                    <ul className="mx-auto max-w-7xl px-4 py-4 sm:px-6">
+                        {NAV.map(([href, label], i) => (
+                            <li
+                                key={href}
+                                style={
+                                    {
+                                        '--d': open
+                                            ? `${180 + i * 70}ms`
+                                            : '0ms',
+                                    } as CSSProperties
+                                }
+                                className={cn(
+                                    'relative overflow-hidden after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:bg-line after:transition-transform after:delay-(--d) after:duration-700 after:ease-[cubic-bezier(0.2,0.7,0.1,1)]',
+                                    !open && 'after:scale-x-0',
+                                )}
+                            >
                                 <Link
                                     href={lp(href)}
+                                    onClick={() => setOpen(false)}
                                     aria-current={
                                         isActive(href) ? 'page' : undefined
                                     }
                                     className={cn(
-                                        'block border-b border-line py-3 font-display text-xl font-semibold',
+                                        'flex items-baseline gap-3 py-3.5 font-display text-2xl font-semibold transition-[translate] delay-(--d) duration-700 ease-[cubic-bezier(0.2,0.7,0.1,1)]',
+                                        !open && 'translate-y-full',
                                         isActive(href) && 'text-signal',
                                     )}
                                 >
+                                    <span className="font-sans text-xs font-medium text-steel tabular-nums">
+                                        0{i + 1}
+                                    </span>
                                     {t(label)}
                                 </Link>
                             </li>
                         ))}
-                        <li className="py-4 sm:hidden">
+                        <li
+                            className={cn(
+                                'py-6 transition-[translate,opacity] duration-700 ease-[cubic-bezier(0.2,0.7,0.1,1)] sm:hidden',
+                                open
+                                    ? 'delay-[650ms]'
+                                    : 'translate-y-4 opacity-0',
+                            )}
+                        >
                             <Link
                                 href={lp('/kontak?perlu=quotation')}
+                                onClick={() => setOpen(false)}
                                 className="block rounded-sm bg-signal px-4 py-3 text-center font-semibold text-white"
                             >
                                 {t('Minta penawaran')}
@@ -143,7 +208,7 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
                 </nav>
             </header>
 
-            <main id="konten" className="flex-1">
+            <main key={path} id="konten" className="flex-1">
                 {children}
             </main>
 
@@ -176,7 +241,7 @@ function SiteFooter() {
     const shopName = (k: string) => (k === 'shopee' ? 'Shopee' : 'Tokopedia');
 
     return (
-        <footer className="bg-flame text-ink [--color-signal-bright:var(--color-ink)]">
+        <footer className="bg-flame text-white [--color-signal-bright:var(--color-white)]">
             <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-12">
                 <div className="md:col-span-5">
                     <p className="font-display text-2xl font-semibold">
@@ -232,7 +297,7 @@ function SiteFooter() {
                                                 rel="noopener"
                                                 aria-label={icon?.name ?? k}
                                                 title={icon?.name ?? k}
-                                                className="grid size-11 place-items-center rounded-sm border border-ink/30 hover:border-white hover:bg-white"
+                                                className="grid size-11 place-items-center rounded-sm border border-white/50 hover:border-white hover:bg-white hover:text-ink"
                                             >
                                                 {icon ? (
                                                     <SocialIcon
@@ -282,7 +347,7 @@ function SiteFooter() {
                     )}
                 </div>
             </div>
-            <div className="border-t border-ink/15">
+            <div className="border-t border-white/25">
                 <div className="mx-auto flex max-w-7xl flex-wrap justify-between gap-2 py-5 pr-20 pl-4 text-sm sm:pr-24 sm:pl-6">
                     <p>
                         © {new Date().getFullYear()} {site.name}.{' '}

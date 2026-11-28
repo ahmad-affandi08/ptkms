@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
-import type { LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
+import ComingSoonArt from '@/components/coming-soon-art';
+import type { Art } from '@/components/coming-soon-art';
 import Img from '@/components/img';
 import { WhatsAppIcon } from '@/components/site-layout';
 import { useT } from '@/lib/i18n';
@@ -42,7 +43,7 @@ export function PageHeader({
                     <img
                         src={image}
                         alt={caption ?? ''}
-                        className="aspect-[16/9] w-full animate-reveal object-cover object-[50%_45%] lg:aspect-auto lg:h-full"
+                        className="aspect-[16/9] w-full object-cover object-[50%_45%] lg:aspect-auto lg:h-full"
                     />
                     {caption && (
                         <figcaption
@@ -63,11 +64,11 @@ export function PageHeader({
                             'lg:flex lg:min-h-[28rem] lg:w-[56%] lg:flex-col lg:justify-end',
                     )}
                 >
-                    <h1 className="max-w-4xl animate-rise text-4xl leading-[1.05] font-semibold tracking-tight sm:text-5xl lg:text-6xl">
+                    <h1 className="max-w-4xl text-4xl leading-[1.05] font-semibold tracking-tight sm:text-5xl lg:text-6xl">
                         {title}
                     </h1>
                     {intro && (
-                        <p className="mt-4 max-w-2xl animate-rise text-lg text-steel [animation-delay:100ms]">
+                        <p className="mt-4 max-w-2xl text-lg text-steel">
                             {intro}
                         </p>
                     )}
@@ -270,7 +271,7 @@ export function ContactBand() {
     const { t, lp } = useT();
 
     return (
-        <section className="bg-flame text-ink [--color-signal-bright:var(--color-ink)]">
+        <section className="bg-flame text-white [--color-signal-bright:var(--color-white)]">
             <Container className="grid gap-8 py-16 lg:grid-cols-12 lg:items-end lg:py-20">
                 <div className="lg:col-span-7">
                     <h2 className="text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">
@@ -278,7 +279,7 @@ export function ContactBand() {
                             'Alat butuh servis, atau sedang menyiapkan pengadaan?',
                         )}
                     </h2>
-                    <p className="mt-3 max-w-xl text-ink/85">
+                    <p className="mt-3 max-w-xl text-white">
                         {t(
                             'Ceritakan kebutuhan Anda. Tim kami membalas pada jam kerja.',
                         )}
@@ -298,7 +299,7 @@ export function ContactBand() {
                     )}
                     <Link
                         href={lp('/kontak')}
-                        className="rounded-sm bg-white px-5 py-3 font-semibold hover:bg-paper"
+                        className="rounded-sm bg-white px-5 py-3 font-semibold text-ink hover:bg-paper"
                     >
                         {t('Isi formulir')}
                     </Link>
@@ -313,7 +314,7 @@ export function ContactBand() {
  * dengan panel pesan di tengah. Tidak menampilkan konten karangan.
  */
 export function ComingSoon({
-    icon: Icon,
+    art,
     title,
     text,
     cards = 3,
@@ -321,7 +322,7 @@ export function ComingSoon({
     columns = 'sm:grid-cols-3',
     children,
 }: {
-    icon: LucideIcon;
+    art: Art;
     title: string;
     text: string;
     cards?: number;
@@ -343,9 +344,9 @@ export function ComingSoon({
                                 'grid place-items-center border border-line bg-plate bg-[repeating-linear-gradient(135deg,transparent_0_12px,rgb(0_0_0/0.03)_12px_13px)]',
                             )}
                         >
-                            <Icon
-                                strokeWidth={1.25}
-                                className="size-12 text-ink/15"
+                            <ComingSoonArt
+                                art={art}
+                                className="art-still h-16 text-ink/15 [--art-accent:currentColor] [--art-glow:currentColor]"
                             />
                         </div>
                         <div className="mt-4 h-3 w-1/3 rounded-full bg-line" />
@@ -356,9 +357,10 @@ export function ComingSoon({
             </ul>
             <div className="grid place-items-center sm:absolute sm:inset-0 sm:p-6">
                 <div className="w-full max-w-lg border border-line bg-white px-6 py-8 text-center shadow-xl shadow-ink/5 sm:px-8">
-                    <span className="mx-auto grid size-12 place-items-center rounded-full bg-flame/15 text-signal">
-                        <Icon aria-hidden className="size-6" />
-                    </span>
+                    <ComingSoonArt
+                        art={art}
+                        className="mx-auto h-24 text-ink"
+                    />
                     <p className="mt-4 font-display text-xl font-semibold">
                         {title}
                     </p>

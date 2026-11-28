@@ -6,8 +6,9 @@
  * Palet mengikuti logo KMS: merah (signal, tombol), oranye (signal-bright, garis & penanda),
  * hijau daun (clinic, WhatsApp), di atas hitam arang netral seperti tulisan logo (ink), tanpa biru.
  * signal #B83336 dengan teks putih 5.9:1; signal-bright #E06A1A hanya untuk elemen non-teks (≥3:1);
- * clinic digelapkan dari #6EBF47 agar lolos 4.5:1. flame #F18139 = oranye tulisan logo, latar bagian besar
- * (footer, ajakan kontak, Di lapangan) dengan teks ink 6.5:1; teks putih di atasnya tidak lolos.
+ * clinic digelapkan dari #6EBF47 agar lolos 4.5:1. flame = latar bagian besar (footer, ajakan kontak,
+ * Di lapangan) dengan teks putih; digelapkan dari oranye tulisan logo #F18139 (putih hanya 2.6:1)
+ * menjadi #C4500F agar teks putih lolos 4.5:1.
  */
 @theme {
     --font-sans: 'Barlow', ui-sans-serif, system-ui, sans-serif;
@@ -23,28 +24,9 @@
     --color-signal: #b83336;
     --color-signal-dark: #932629;
     --color-signal-bright: #e06a1a;
-    --color-flame: #f18139;
+    --color-flame: #c4500f;
     --color-clinic: #367a2f;
     --color-clinic-dark: #2c6527;
-
-    --animate-reveal: reveal 900ms cubic-bezier(0.2, 0.7, 0.1, 1) both;
-    --animate-rise: rise 700ms cubic-bezier(0.2, 0.7, 0.1, 1) both;
-
-    @keyframes rise {
-        from {
-            opacity: 0;
-            translate: 0 1.25rem;
-        }
-    }
-
-    @keyframes reveal {
-        from {
-            clip-path: inset(0 0 0 100%);
-        }
-        to {
-            clip-path: inset(0 0 0 0);
-        }
-    }
 }
 
 @layer base {
@@ -102,42 +84,127 @@
         }
     }
 
-    /* Pindah halaman (View Transitions dari Inertia): header diam, isi memudar lalu naik sedikit. */
+    /*
+     * Pindah halaman (View Transitions dari Inertia): halaman baru naik seperti tirai menutupi
+     * halaman lama yang mundur dan meredup; header tetap diam (view-transition-name di site-layout).
+     */
     ::view-transition-old(root) {
-        animation: 140ms ease-in both vt-out;
+        animation: 800ms cubic-bezier(0.7, 0, 0.2, 1) both vt-out;
     }
     ::view-transition-new(root) {
-        animation: 380ms cubic-bezier(0.2, 0.7, 0.1, 1) both vt-in;
+        animation: 800ms cubic-bezier(0.7, 0, 0.2, 1) both vt-in;
+    }
+    /* Menu mobile punya grup sendiri: hanya versi live-nya yang tampil, supaya tirai menutupnya tidak berbayang. */
+    ::view-transition-old(mobile-menu) {
+        display: none;
+    }
+    ::view-transition-new(mobile-menu) {
+        animation: none;
     }
     @keyframes vt-out {
         to {
-            opacity: 0;
+            opacity: 0.3;
+            scale: 0.94;
+            translate: 0 -4rem;
         }
     }
     @keyframes vt-in {
         from {
-            opacity: 0;
-            translate: 0 0.75rem;
+            clip-path: inset(100% 0 0 0);
+            translate: 0 6rem;
+        }
+        to {
+            clip-path: inset(0 0 0 0);
+        }
+    }
+
+    /*
+     * html.motion dipasang skrip di <head> (app.blade.php) bila gerak tidak dikurangi. Elemen yang
+     * nanti dianimasikan resources/js/lib/motion.ts disembunyikan dulu agar tidak berkedip saat JS
+     * memuat; pemilihnya harus sama dengan di sana. Kalau JS gagal, failsafe menampilkannya lagi.
+     */
+    html.motion main > :first-child :is(h1, h1 ~ *),
+    html.motion main > :first-child > figure,
+    html.motion main > :not(:first-child) h2,
+    html.motion
+        main
+        > :not(:first-child)
+        :is(h2 + p, li, article):not(:where(li, article) *) {
+        visibility: hidden;
+        animation: motion-failsafe 0s 2.5s forwards;
+    }
+    @keyframes motion-failsafe {
+        to {
+            visibility: visible;
         }
     }
 }
 
 @layer components {
-    /*
-     * Muncul saat di-scroll, murni CSS (scroll-driven animation): tanpa JS, aman untuk SSR,
-     * peramban tanpa dukungan tetap menampilkan konten apa adanya. Rentang dalam rem supaya
-     * elemen tinggi pun sudah utuh sebelum dibaca. Elemen di dalam kartu tidak ikut, agar tidak dobel.
-     */
-    @supports (animation-timeline: view()) {
-        main
-            section
-            :is(h2, h2 + p, li, article, figure, blockquote):not(
-                :where(li, article, figure, blockquote) *
-            ) {
-            animation: rise linear both;
-            animation-timeline: view();
-            animation-range: entry 0 entry 10rem;
+    /* Ilustrasi ComingSoon (coming-soon-art.tsx). Keadaan dasar sudah utuh; animasi hanya hiasan. */
+    .art-draw {
+        stroke-dasharray: 1;
+        animation: art-draw 3.2s cubic-bezier(0.6, 0, 0.2, 1) var(--d, 0s)
+            infinite;
+    }
+    @keyframes art-draw {
+        0% {
+            stroke-dashoffset: 1;
         }
+        45%,
+        85% {
+            stroke-dashoffset: 0;
+            opacity: 1;
+        }
+        100% {
+            stroke-dashoffset: 0;
+            opacity: 0;
+        }
+    }
+    .art-blink {
+        animation: art-blink 1.4s ease-in-out infinite;
+    }
+    @keyframes art-blink {
+        50% {
+            opacity: 0.15;
+        }
+    }
+    .art-glow {
+        opacity: 0.2;
+        animation: art-glow 2.7s ease-in-out var(--d, 0s) infinite;
+    }
+    @keyframes art-glow {
+        30%,
+        60% {
+            opacity: 1;
+        }
+    }
+    .art-pulse {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: art-pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes art-pulse {
+        50% {
+            scale: 1.2;
+        }
+    }
+    .art-flash {
+        animation: art-flash 2.8s ease-out infinite;
+    }
+    @keyframes art-flash {
+        0%,
+        70%,
+        100% {
+            opacity: 0;
+        }
+        75%,
+        85% {
+            opacity: 1;
+        }
+    }
+    .art-still * {
+        animation: none;
     }
 
     /* Foto kartu sedikit membesar saat kartunya di-hover. */

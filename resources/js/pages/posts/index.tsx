@@ -1,5 +1,4 @@
 import { Link } from '@inertiajs/react';
-import { Newspaper } from 'lucide-react';
 import {
     buttonOutline,
     ComingSoon,
@@ -29,7 +28,7 @@ export default function Posts({
             <Container className="py-12 lg:py-16">
                 {posts.data.length === 0 && (
                     <ComingSoon
-                        icon={Newspaper}
+                        art="article"
                         aspect="aspect-[3/2]"
                         title={t('Artikel pertama segera terbit')}
                         text={t(

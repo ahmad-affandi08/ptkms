@@ -25,6 +25,9 @@
 
         <script type="application/ld+json">{!! json_encode($org, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) !!}</script>
 
+        {{-- Animasi aktif: sembunyikan hero sebelum JS jalan supaya tidak berkedip (lihat app.css). --}}
+        <script>matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.classList.add('motion')</script>
+
         @fonts
 
         @viteReactRefresh

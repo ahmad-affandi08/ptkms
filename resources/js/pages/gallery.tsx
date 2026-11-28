@@ -1,4 +1,3 @@
-import { Images } from 'lucide-react';
 import { ComingSoon, Container, PageHeader } from '@/components/blocks';
 import Img from '@/components/img';
 import Seo from '@/components/seo';
@@ -21,7 +20,7 @@ export default function Gallery({
             <Container className="py-12 lg:py-16">
                 {items.length === 0 && (
                     <ComingSoon
-                        icon={Images}
+                        art="photo"
                         aspect="aspect-[3/4]"
                         title={t('Foto segera hadir')}
                         text={t(

@@ -1,5 +1,4 @@
 import { Link } from '@inertiajs/react';
-import { Hospital } from 'lucide-react';
 import {
     buttonOutline,
     ComingSoon,
@@ -28,7 +27,7 @@ export default function Projects({
             <Container className="py-12 lg:py-20">
                 {projects.length === 0 && (
                     <ComingSoon
-                        icon={Hospital}
+                        art="hospital"
                         title={t('Dokumentasi proyek segera hadir')}
                         text={t(
                             'Sementara itu, lihat foto pekerjaan tim kami di galeri.',
