@@ -270,8 +270,9 @@ export function ContactBand() {
     const { site } = usePage().props;
     const { t, lp } = useT();
 
+    // Merah logo, bukan oranye, supaya tidak menyatu dengan footer oranye tepat di bawahnya.
     return (
-        <section className="bg-flame text-white [--color-signal-bright:var(--color-white)]">
+        <section className="bg-signal text-white [--color-signal-bright:var(--color-white)]">
             <Container className="grid gap-8 py-16 lg:grid-cols-12 lg:items-end lg:py-20">
                 <div className="lg:col-span-7">
                     <h2 className="text-3xl leading-tight font-semibold tracking-tight sm:text-4xl">
@@ -291,15 +292,15 @@ export function ContactBand() {
                             href={waLink(site.whatsapp)}
                             target="_blank"
                             rel="noopener"
-                            className="inline-flex items-center gap-2 rounded-sm bg-clinic px-5 py-3 font-semibold text-white hover:bg-clinic-dark"
+                            className="inline-flex items-center gap-2 rounded-sm bg-white px-5 py-3 font-semibold text-ink hover:bg-paper"
                         >
-                            <WhatsAppIcon className="size-5" />
+                            <WhatsAppIcon className="size-5 text-clinic" />
                             {t('Chat WhatsApp')}
                         </a>
                     )}
                     <Link
                         href={lp('/kontak')}
-                        className="rounded-sm bg-white px-5 py-3 font-semibold text-ink hover:bg-paper"
+                        className="rounded-sm border border-white/70 px-5 py-3 font-semibold text-white hover:border-white hover:bg-white/10"
                     >
                         {t('Isi formulir')}
                     </Link>

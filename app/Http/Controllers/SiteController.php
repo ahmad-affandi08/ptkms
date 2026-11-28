@@ -38,9 +38,9 @@ class SiteController extends Controller
             'field' => GalleryItem::visible()->with('media')->limit(4)->get()->map->toPublic(),
             'about' => Translation::pick($s['about'] ?? null),
             'stats' => array_map(fn (array $row) => ['value' => $row['value'], 'label' => Translation::pick($row['label'] ?? null)], $s['stats'] ?? []),
-            'services' => Service::visible()->get()->map->toPublic(),
-            // Produk unggulan dulu, sisanya produk terbaru, supaya bagian ini terisi selama katalog tidak kosong.
-            'products' => Product::visible()->reorder()->orderByDesc('is_featured')->orderBy('sort')->latest('id')->with('category', 'brand', 'media')->limit(8)->get()->map->toPublic(),
+            'services' => Service::visible()->with('media')->get()->map->toPublic(),
+            // Produk unggulan dulu, lalu terbaru; hanya yang berfoto, supaya beranda tidak menampilkan kartu kosong.
+            'products' => Product::visible()->has('media')->reorder()->orderByDesc('is_featured')->orderBy('sort')->latest('id')->with('category', 'brand', 'media')->limit(8)->get()->map->toPublic(),
             'brands' => Partner::visible()->where('type', 'brand')->with('media')->get()->map->toPublic(),
             'clients' => Partner::visible()->where('type', 'client')->with('media')->get()->map->toPublic(),
             'projects' => Project::visible()->with('media')->limit(3)->get()->map->toPublic(),
