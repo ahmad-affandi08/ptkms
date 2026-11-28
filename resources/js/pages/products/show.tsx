@@ -77,7 +77,7 @@ export default function ProductShow({
                             sizes="(min-width: 1024px) 58vw, 100vw"
                             className={
                                 software
-                                    ? 'size-full object-cover object-top'
+                                    ? 'size-full object-contain'
                                     : 'size-full object-contain p-6 mix-blend-multiply'
                             }
                         />

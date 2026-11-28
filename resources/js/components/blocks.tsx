@@ -131,7 +131,7 @@ export function ProductCard({ product }: { product: Product }) {
                     sizes="(min-width: 1024px) 25vw, 50vw"
                     className={
                         software
-                            ? 'size-full object-cover object-top'
+                            ? 'size-full object-contain p-3'
                             : 'size-full object-contain p-4 mix-blend-multiply'
                     }
                 />
