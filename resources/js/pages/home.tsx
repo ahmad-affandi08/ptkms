@@ -4,7 +4,7 @@ import {
     ContactBand,
     Container,
     LocationSection,
-    ProductCard,
+    ProductGrid,
     SectionHeading,
     TextLink,
 } from '@/components/blocks';
@@ -250,11 +250,10 @@ export default function Home({
                                 </TextLink>
                             }
                         />
-                        <div className="grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-4">
-                            {products.map((p) => (
-                                <ProductCard key={p.slug} product={p} />
-                            ))}
-                        </div>
+                        <ProductGrid
+                            products={products}
+                            columns="lg:grid-cols-4"
+                        />
                     </Container>
                 </section>
             )}

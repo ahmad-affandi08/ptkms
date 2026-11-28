@@ -8,7 +8,7 @@ import {
     Empty,
     PageHeader,
     Pagination,
-    ProductCard,
+    ProductGrid,
 } from '@/components/blocks';
 import Seo from '@/components/seo';
 import { useT } from '@/lib/i18n';
@@ -183,11 +183,7 @@ export default function Products({
                         {products.total} {t('produk')}
                     </p>
                     {products.data.length > 0 ? (
-                        <div className="grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3">
-                            {products.data.map((p) => (
-                                <ProductCard key={p.slug} product={p} />
-                            ))}
-                        </div>
+                        <ProductGrid products={products.data} />
                     ) : !filters.q && !filters.kategori && !filters.jenis ? (
                         <ComingSoon
                             art="monitor"

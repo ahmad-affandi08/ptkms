@@ -4,7 +4,7 @@ import { useState } from 'react';
 import {
     ContactBand,
     Container,
-    ProductCard,
+    ProductGrid,
     Prose,
     SectionHeading,
 } from '@/components/blocks';
@@ -236,11 +236,10 @@ export default function ProductShow({
                 <section className="border-t border-line bg-white py-14">
                     <Container>
                         <SectionHeading title={t('Produk terkait')} />
-                        <div className="grid grid-cols-2 gap-x-5 gap-y-10 lg:grid-cols-4">
-                            {related.map((p) => (
-                                <ProductCard key={p.slug} product={p} />
-                            ))}
-                        </div>
+                        <ProductGrid
+                            products={related}
+                            columns="lg:grid-cols-4"
+                        />
                     </Container>
                 </section>
             )}

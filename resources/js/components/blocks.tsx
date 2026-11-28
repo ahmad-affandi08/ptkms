@@ -1,4 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
+import { MonitorSmartphone, Stethoscope } from 'lucide-react';
 import type { ReactNode } from 'react';
 import ComingSoonArt from '@/components/coming-soon-art';
 import type { Art } from '@/components/coming-soon-art';
@@ -118,42 +119,124 @@ export function TextLink({
     );
 }
 
+/**
+ * Software tampil lebar: screenshot berdiri di atas latar oranye pucat seperti layar aplikasi, tidak pernah
+ * terpotong. Alat kesehatan tampil sebagai kartu katalog dengan foto, merek/model, dan ringkasan.
+ */
 export function ProductCard({ product }: { product: Product }) {
     const { t, lp } = useT();
-    const software = product.type === 'software';
+    const href = lp(`/produk/${product.slug}`);
+    const link = (
+        <Link
+            href={href}
+            className="group-hover:text-signal after:absolute after:inset-0"
+        >
+            {product.name}
+        </Link>
+    );
+
+    if (product.type === 'software') {
+        return (
+            <article className="group relative">
+                <div className="flex aspect-[16/10] items-end justify-center overflow-hidden bg-[color-mix(in_oklab,var(--color-flame)_12%,var(--color-paper))] px-[7%] pt-[7%]">
+                    {product.image ? (
+                        <Img
+                            image={product.image}
+                            alt={product.name}
+                            sizes="(min-width: 768px) 50vw, 100vw"
+                            className="max-h-full w-auto max-w-full rounded-t-md object-contain shadow-[0_18px_50px_-18px_rgb(0_0_0/0.45)] ring-1 ring-black/10"
+                        />
+                    ) : (
+                        <MonitorSmartphone
+                            aria-hidden
+                            strokeWidth={1.25}
+                            className="mb-[18%] size-20 text-flame/50"
+                        />
+                    )}
+                </div>
+                <p className="mt-5 text-sm font-semibold text-signal">
+                    {t('Software')}
+                </p>
+                <h3 className="mt-1 text-2xl leading-tight font-semibold tracking-tight sm:text-3xl">
+                    {link}
+                </h3>
+                {product.excerpt && (
+                    <p className="mt-2 line-clamp-2 max-w-xl text-steel">
+                        {product.excerpt}
+                    </p>
+                )}
+                <span className="mt-4 inline-block border-b-2 border-signal-bright pb-0.5 font-semibold text-signal">
+                    {t('Selengkapnya')}
+                </span>
+            </article>
+        );
+    }
+
+    const meta =
+        [product.brand, product.model].filter(Boolean).join(' / ') ||
+        product.category?.name;
 
     return (
-        <article className="group relative">
-            <div className="relative aspect-square overflow-hidden bg-plate">
-                <Img
-                    image={product.image}
-                    alt={product.name}
-                    sizes="(min-width: 1024px) 25vw, 50vw"
-                    className={
-                        software
-                            ? 'size-full object-contain p-3'
-                            : 'size-full object-contain p-4 mix-blend-multiply'
-                    }
-                />
-                {software && (
-                    <span className="absolute top-2 left-2 rounded-sm bg-white px-2 py-1 text-xs font-semibold text-signal ring-1 ring-line">
-                        {t('Software')}
-                    </span>
+        <article className="group relative flex flex-col border border-line bg-white hover:border-ink/40">
+            <div className="flex aspect-square items-center justify-center overflow-hidden bg-plate">
+                {product.image ? (
+                    <Img
+                        image={product.image}
+                        alt={product.name}
+                        sizes="(min-width: 1024px) 25vw, 50vw"
+                        className="size-full object-contain p-5 mix-blend-multiply"
+                    />
+                ) : (
+                    <Stethoscope
+                        aria-hidden
+                        strokeWidth={1.25}
+                        className="size-14 text-steel/40"
+                    />
                 )}
             </div>
-            <h3 className="mt-3 font-display text-lg leading-snug font-semibold">
-                <Link
-                    href={lp(`/produk/${product.slug}`)}
-                    className="group-hover:underline group-hover:decoration-signal-bright group-hover:underline-offset-4 after:absolute after:inset-0"
-                >
-                    {product.name}
-                </Link>
-            </h3>
-            <p className="mt-0.5 text-sm text-steel">
-                {[product.brand, product.model].filter(Boolean).join(' / ') ||
-                    product.category?.name}
-            </p>
+            <div className="flex flex-1 flex-col p-4">
+                {meta && <p className="text-sm text-steel">{meta}</p>}
+                <h3 className="mt-1 font-display text-lg leading-snug font-semibold">
+                    {link}
+                </h3>
+                {product.excerpt && (
+                    <p className="mt-1.5 line-clamp-2 text-sm text-steel">
+                        {product.excerpt}
+                    </p>
+                )}
+            </div>
         </article>
+    );
+}
+
+/** Software di baris lebar sendiri (2 kolom), alat kesehatan di grid katalog di bawahnya. */
+export function ProductGrid({
+    products,
+    columns = 'md:grid-cols-3',
+}: {
+    products: Product[];
+    columns?: string;
+}) {
+    const software = products.filter((p) => p.type === 'software');
+    const devices = products.filter((p) => p.type !== 'software');
+
+    return (
+        <div className="space-y-14">
+            {software.length > 0 && (
+                <div className="grid gap-x-8 gap-y-12 md:grid-cols-2">
+                    {software.map((p) => (
+                        <ProductCard key={p.slug} product={p} />
+                    ))}
+                </div>
+            )}
+            {devices.length > 0 && (
+                <div className={cn('grid grid-cols-2 gap-4 sm:gap-5', columns)}>
+                    {devices.map((p) => (
+                        <ProductCard key={p.slug} product={p} />
+                    ))}
+                </div>
+            )}
+        </div>
     );
 }
 
